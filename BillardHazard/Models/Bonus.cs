@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BillardHazard.Models;
 
-public partial class Bonu
+public partial class Bonus
 {
     public int Id { get; set; }
 
