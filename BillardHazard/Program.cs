@@ -32,7 +32,7 @@ using (var scope = app.Services.CreateScope())
     List<Rule> rules = ruleRepo.GetAll();
 
     int id = rules.First(r => r.Explanation == "Règle parmis d'autres").Id;
-    Rule readRule = ruleRepo.FindById(id);
+    Rule? readRule = ruleRepo.FindById(id);
 
     readRule.Explanation = "UPDATE Règle parmis d'autres";
     ruleRepo.Update(readRule);
@@ -41,13 +41,13 @@ using (var scope = app.Services.CreateScope())
 
     //Test repo Bonus : GetAll, Création, Affichage, Modification, Suppression
     Bonus bonus = new Bonus();
-    bonus.Explanation = "Règle parmis d'autres";
+    bonus.Explanation = "Bonus parmis d'autres";
     bonusRepo.Create(bonus);
 
     List<Bonus> bonuses = bonusRepo.GetAll();
 
     int bonusId = bonuses.First(b => b.Explanation == "Bonus parmis d'autres").Id;
-    Bonus readBonus= bonusRepo.FindById(bonusId);
+    Bonus? readBonus= bonusRepo.FindById(bonusId);
 
     readBonus.Explanation = "UPDATE Règle parmis d'autres";
     bonusRepo.Update(readBonus);

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BillardHazard.Repositories
 {
-    public class Repository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly BhContext _dbContext;
 
@@ -40,18 +40,21 @@ namespace BillardHazard.Repositories
 
         public void Delete(T entity){ 
             _dbContext.Remove(entity);
+            _dbContext.SaveChanges();
             Console.WriteLine($"{typeof(T).Name} supprimée !");
         }
 
         public void Update(T entity)
         {
             _dbContext.Set<T>().Update(entity);
+            _dbContext.SaveChanges();
             Console.WriteLine($"{typeof(T).Name} modifiée !");
         }
 
         public void Create(T entity)
         {
             _dbContext.Set<T>().Add(entity);
+            _dbContext.SaveChanges();
             Console.WriteLine($"Nouvelle {typeof(T).Name} créée !");
         }
     }
