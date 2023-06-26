@@ -1,5 +1,6 @@
 using BillardHazard;
 using BillardHazard.Models;
+using BillardHazard.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 
@@ -18,22 +19,40 @@ using (var scope = app.Services.CreateScope())
     var scopedServices = scope.ServiceProvider;
     var db = scopedServices.GetRequiredService<BhContext>();
 
+    Repository<Rule> ruleRepo = new Repository<Rule>(db);
+    Repository<Bonus> bonusRepo = new Repository<Bonus>(db);
+
     db.Database.EnsureCreated();
 
-    //Create
-    db.Add(new Rule { Explanation = "+1 coup" });
-    db.SaveChanges();
+    //Test repo Rule : Création, GetAll, Affichage, Modification, Suppression
+    Rule rule = new Rule();
+    rule.Explanation = "Règle parmis d'autres";
+    ruleRepo.Create(rule);
 
-    //Read
-    Rule rule = db.Rules.First(e => e.Explanation == "+1 coup");
+    List<Rule> rules = ruleRepo.GetAll();
 
-    //Update
-    rule.Explanation = "+30 coups";
-    db.SaveChanges();
+    int id = rules.First(r => r.Explanation == "Règle parmis d'autres").Id;
+    Rule readRule = ruleRepo.FindById(id);
 
-    //Delete
-    db.Remove(rule);
-    db.SaveChanges();
+    readRule.Explanation = "UPDATE Règle parmis d'autres";
+    ruleRepo.Update(readRule);
+
+    ruleRepo.Delete(readRule);
+
+    //Test repo Bonus : GetAll, Création, Affichage, Modification, Suppression
+    Bonus bonus = new Bonus();
+    bonus.Explanation = "Règle parmis d'autres";
+    bonusRepo.Create(bonus);
+
+    List<Bonus> bonuses = bonusRepo.GetAll();
+
+    int bonusId = bonuses.First(b => b.Explanation == "Bonus parmis d'autres").Id;
+    Bonus readBonus= bonusRepo.FindById(bonusId);
+
+    readBonus.Explanation = "UPDATE Règle parmis d'autres";
+    bonusRepo.Update(readBonus);
+
+    bonusRepo.Delete(readBonus);
 }
 
 // Configure the HTTP request pipeline.
