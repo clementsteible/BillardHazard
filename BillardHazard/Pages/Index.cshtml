@@ -1,10 +1,29 @@
 ﻿@page
-@model IndexModel
+@model BillardHazard.Pages.IndexModel
+
 @{
-    ViewData["Title"] = "Billard Hazard";
+    ViewData["Title"] = "Choisis ta couleur";
 }
 
-<div class="text-center">
-    <div id="display"></div>
-    <button id="btnGo">GO !</button>
+<h2>@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl">
+            <a asp-page="/Challenge/Index" asp-route-teamNumber="1">
+                <section class="stage">
+                    <figure class="ball yellowBall"><span class="shadow"></span></figure>
+                </section>
+            </a>
+        </div>
+        <div class="col-xl">
+            <a asp-page="/Challenge/Index" asp-route-teamNumber="2">
+                <section class="stage">
+                    <figure class="ball redBall"><span class="shadow"></span></figure>
+                </section>
+            </a>
+        </div>
+    </div>
 </div>
+
+

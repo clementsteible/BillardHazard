@@ -1,0 +1,65 @@
+﻿@page "{teamNumber:int}"
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Au tour des";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<section class="stage">
+    <figure class="ball @Model.CssBallColorClass"><span class="shadow"></span></figure>
+</section>
+
+<div id="display"></div>
+<button id="btnGo">GO !</button>
+
+<div id="challengeState" class="challengeNotValidate" onclick="ChangeChallengeValidationState()">
+    <span id="challengeStateDescritption">Défi non-validé</span>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm">
+            <a>Tour supplémentaire pour l'équipe @Model.ActualTeam.Color</a>
+        </div>
+        <div class="col-sm">
+            <a>Au tour de l'équipe @Model.OpponentTeam.Color</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+
+        var display = document.getElementById("display");
+        var btnGo = document.getElementById("btnGo");
+
+        var decodedJson = decodeHtml('@Model.JsonRules');
+        var rules = JSON.parse(decodedJson);
+
+        for(let i = 0; i < rules.length; i++){
+            console.log(rules[i].Explanation);
+        }
+
+        function decodeHtml(html) {
+            var txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        function WriteInDisplay(text) {
+            display.innerHTML = text;
+        }
+
+        //On choisit une règle au hasard dans la liste des règles et on l'affiche
+        function DisplaysRandomRule() {
+            WriteInDisplay(rules[Math.floor(Math.random() * rules.length)].Explanation);
+        }
+
+        btnGo.addEventListener("click", function () { DisplaysRandomRule(); });
+        //Afficher la rule
+        DisplaysRandomRule();
+    });
+</script>
+<script src="~/js/challengeValidateOrNot.js"></script>

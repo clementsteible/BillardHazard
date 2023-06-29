@@ -1,6 +1,8 @@
 using BillardHazard;
 using BillardHazard.Models;
 using BillardHazard.Repositories;
+using BillardHazard.Tools;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 
@@ -8,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.RootDirectory = "/Pages";
+});
 
 builder.Services.AddDbContext<BhContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
 
@@ -20,10 +26,12 @@ using (var scope = app.Services.CreateScope())
     var db = scopedServices.GetRequiredService<BhContext>();
 
     Repository<Rule> ruleRepo = new Repository<Rule>(db);
-    Repository<Bonus> bonusRepo = new Repository<Bonus>(db);
 
     db.Database.EnsureCreated();
 
+    string[] entityNames = db.GetEntityNames();
+
+    /*
     //Test repo Rule : Création, GetAll, Affichage, Modification, Suppression
     Rule rule = new Rule();
     rule.Explanation = "Règle parmis d'autres";
@@ -53,6 +61,7 @@ using (var scope = app.Services.CreateScope())
     bonusRepo.Update(readBonus);
 
     bonusRepo.Delete(readBonus);
+    */
 }
 
 // Configure the HTTP request pipeline.
@@ -71,7 +80,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
-
 
 app.Run();
 

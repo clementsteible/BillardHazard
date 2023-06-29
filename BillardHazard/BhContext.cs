@@ -9,12 +9,14 @@ namespace BillardHazard
         public BhContext() { }
 
         public DbSet<Rule> Rules {get; set; }
-        public DbSet<Bonus> Bonuses { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<Game> Games { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Rule>().ToTable("Rule");
-            modelBuilder.Entity<Bonus>().ToTable("Bonus");
+            modelBuilder.Entity<Team>().ToTable("Team");
+            modelBuilder.Entity<Game>().ToTable("Game");
         }
     }
 }
