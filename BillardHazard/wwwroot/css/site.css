@@ -37,13 +37,38 @@ footer {
 }
 
 .challengeValidate::before {
-    content: "\2713";
+    content: "\2714";
     color: forestgreen;
 }
 
-#challengeState {
-    font-size: 5rem;
+#challengeState, #nextTeamTurn, #oneMoreTurn, #btnGo {
+    font-size: 2rem;
     user-select: none;
     cursor: pointer;
 }
 
+#oneMoreTurn::before {
+    content: "\21BB";
+}
+
+#nextTeamTurn::before {
+    content: "\21B7";
+}
+
+#btnGo {
+    font-size: 3rem;
+}
+
+:root{
+    --dice: "\2682";
+}
+
+#btnGo:before {
+    content: var(--dice);
+}
+
+#display {
+    font-size: 2rem;
+    border: 2px solid;
+    border-radius: 16px;
+}

@@ -11,12 +11,15 @@ namespace BillardHazard
         public DbSet<Rule> Rules {get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<HighScore> HighScores { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Rule>().ToTable("Rule");
             modelBuilder.Entity<Team>().ToTable("Team");
             modelBuilder.Entity<Game>().ToTable("Game");
+            modelBuilder.Entity<HighScore>().ToTable("HighScore");
         }
+
     }
 }

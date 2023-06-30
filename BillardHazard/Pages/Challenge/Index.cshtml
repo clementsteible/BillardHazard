@@ -2,7 +2,7 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = "Au tour des";
+    ViewData["Title"] = string.Format("Au tour de l'équipe {0} : {1}", Model.ActualTeam.Color, Model.ActualTeam.Name);
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -12,18 +12,18 @@
 </section>
 
 <div id="display"></div>
-<button id="btnGo">GO !</button>
+<a id="btnGo"></a>
 
-<div id="challengeState" class="challengeNotValidate" onclick="ChangeChallengeValidationState()">
+<div id="challengeState" class="challengeNotValidate">
     <span id="challengeStateDescritption">Défi non-validé</span>
 </div>
 
 <div class="container mt-5">
     <div class="row">
-        <div class="col-sm">
+        <div id="oneMoreTurn" class="col-sm">
             <a>Tour supplémentaire pour l'équipe @Model.ActualTeam.Color</a>
         </div>
-        <div class="col-sm">
+        <div id="nextTeamTurn" class="col-sm">
             <a>Au tour de l'équipe @Model.OpponentTeam.Color</a>
         </div>
     </div>
@@ -37,10 +37,6 @@
 
         var decodedJson = decodeHtml('@Model.JsonRules');
         var rules = JSON.parse(decodedJson);
-
-        for(let i = 0; i < rules.length; i++){
-            console.log(rules[i].Explanation);
-        }
 
         function decodeHtml(html) {
             var txt = document.createElement("textarea");
@@ -57,9 +53,64 @@
             WriteInDisplay(rules[Math.floor(Math.random() * rules.length)].Explanation);
         }
 
-        btnGo.addEventListener("click", function () { DisplaysRandomRule(); });
+        btnGo.addEventListener("click", function () { DisplaysRandomRule(); ChallengeDiceDecrease(); });
         //Afficher la rule
         DisplaysRandomRule();
+
+        var challengeState = document.getElementById('challengeState');
+        var challengeStateDescritption = document.getElementById('challengeStateDescritption');
+
+        var anotherTurn
+
+        var root = document.querySelector(':root');
+        var challengeDiceCounter = 2;
+
+        function ChangeChallengeValidationState() {
+            if (challengeState.classList == 'challengeNotValidate') {
+                challengeState.classList = 'challengeValidate';
+                challengeStateDescritption.innerHTML = "Défi validé";
+            }
+            else {
+                challengeState.classList = 'challengeNotValidate';
+                challengeStateDescritption.innerHTML = "Défi non-validé";
+            }
+        }
+
+        challengeState.addEventListener("click", function () { ChangeChallengeValidationState(); });
+
+        function ChallengeDiceDecrease() {
+            challengeDiceCounter--;
+
+            let diceCode = "\"\\268" + challengeDiceCounter + "\"";
+
+            root.style.setProperty("--dice", diceCode);
+
+            if (challengeDiceCounter < 0) {
+                btnGo.style.display = 'none';
+            }
+        }
+
+        //Commandes clavier
+        window.addEventListener("keydown", function (event) {
+
+            switch (event.which) {
+                //Enter
+                case 13:
+                    btnGo.click();
+                    break;
+                //Flèche gauche
+                case 37:
+                    oneMoreTurn.click();
+                    break;
+                //Flèche droite
+                case 39:
+                    nextTeamTurn.click();
+                    break;
+                //Espace
+                case 32:
+                    challengeState.click();
+                    break;
+            }
+        });
     });
 </script>
-<script src="~/js/challengeValidateOrNot.js"></script>

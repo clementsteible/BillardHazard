@@ -3,6 +3,7 @@ using System;
 using BillardHazard;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BillardHazard.Migrations
 {
     [DbContext(typeof(BhContext))]
-    partial class BhContextModelSnapshot : ModelSnapshot
+    [Migration("20230630143614_ChangementTeamv2")]
+    partial class ChangementTeamv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,22 +31,6 @@ namespace BillardHazard.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Game", (string)null);
-                });
-
-            modelBuilder.Entity("BillardHazard.Models.HighScore", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<int?>("TeamId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
-
-                    b.ToTable("HighScore", (string)null);
                 });
 
             modelBuilder.Entity("BillardHazard.Models.Rule", b =>
@@ -86,15 +73,6 @@ namespace BillardHazard.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Team", (string)null);
-                });
-
-            modelBuilder.Entity("BillardHazard.Models.HighScore", b =>
-                {
-                    b.HasOne("BillardHazard.Models.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("BillardHazard.Models.Team", b =>
