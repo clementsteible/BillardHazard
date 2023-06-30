@@ -19,7 +19,7 @@ namespace BillardHazard.Pages.HighScore
             _context = context;
         }
 
-        public IList<HighScore> HighScore { get;set; } = default!;
+        public IList<Models.HighScore> HighScore { get;set; } = default!;
 
         public async Task OnGetAsync()
         {

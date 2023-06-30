@@ -25,7 +25,7 @@ namespace BillardHazard.Pages.HighScore
         }
 
         [BindProperty]
-        public HighScore HighScore { get; set; } = default!;
+        public Models.HighScore HighScore { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
