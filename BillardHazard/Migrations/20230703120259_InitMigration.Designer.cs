@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BillardHazard.Migrations
 {
     [DbContext(typeof(BhContext))]
-    [Migration("20230703112308_ChgtTeam")]
-    partial class ChgtTeam
+    [Migration("20230703120259_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,9 +24,9 @@ namespace BillardHazard.Migrations
 
             modelBuilder.Entity("BillardHazard.Models.Game", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -39,8 +39,8 @@ namespace BillardHazard.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int?>("TeamId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -51,9 +51,9 @@ namespace BillardHazard.Migrations
 
             modelBuilder.Entity("BillardHazard.Models.Rule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Explanation")
                         .HasColumnType("longtext");
@@ -65,15 +65,15 @@ namespace BillardHazard.Migrations
 
             modelBuilder.Entity("BillardHazard.Models.Team", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Color")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("GameId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("GameId")
+                        .HasColumnType("char(36)");
 
                     b.Property<bool>("IsItsTurn")
                         .HasColumnType("tinyint(1)");

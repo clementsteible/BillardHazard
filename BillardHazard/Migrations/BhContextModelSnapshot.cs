@@ -69,7 +69,7 @@ namespace BillardHazard.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("longtext");
 
-                    b.Property<Guid?>("GameId")
+                    b.Property<Guid>("GameId")
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("IsItsTurn")
@@ -104,7 +104,9 @@ namespace BillardHazard.Migrations
                 {
                     b.HasOne("BillardHazard.Models.Game", null)
                         .WithMany("Teams")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BillardHazard.Models.Game", b =>

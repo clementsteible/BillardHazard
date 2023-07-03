@@ -8,5 +8,6 @@
         public int Score { get; set; }
         public string? Color { get; set; }
         public bool IsItsTurn { get; set; }
+        public Guid GameId { get; set; }
     }
 }

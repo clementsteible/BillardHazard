@@ -1,5 +1,6 @@
 using BillardHazard.Models;
 using BillardHazard.Repositories;
+using BillardHazard.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -26,23 +27,23 @@ namespace BillardHazard.Pages
             Team redTeam = new Team();
 
             yellowTeam.Name = Request.Form["yellowTeamName"];
-            redTeam.Name = Request.Form["redTeamName"];
-
             yellowTeam.IsItsTurn = Request.Form["firstTeam"] == YELLOW_TEAM;
+            yellowTeam.Number = (int)ColorTeamEnum.Jaune;
+            yellowTeam.Color = ((ColorTeamEnum)yellowTeam.Number).ToString();
+
+            redTeam.Name = Request.Form["redTeamName"];
             redTeam.IsItsTurn = Request.Form["firstTeam"] == RED_TEAM;
+            redTeam.Number = (int)ColorTeamEnum.Rouge;
+            redTeam.Color = ((ColorTeamEnum)redTeam.Number).ToString();
 
             newGame.Teams.Add(yellowTeam);
             newGame.Teams.Add(redTeam);
 
             Repository<Game> repoGame = new Repository<Game>(_dbContext);
-            Repository<Team> repoTeam = new Repository<Team>(_dbContext);
 
-            repoTeam.Create(yellowTeam);
-            repoTeam.Create(redTeam);
+            //repoGame.Create(newGame);
 
-            repoGame.Create(newGame);
-
-            return RedirectToPage("/Challenge");
+            return RedirectToPage("/Challenge/Index");
         }
     }
 }

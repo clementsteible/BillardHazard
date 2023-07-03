@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BillardHazard.Migrations
 {
     [DbContext(typeof(BhContext))]
-    [Migration("20230629134547_GameChanges")]
-    partial class GameChanges
+    [Migration("20230703123626_TeamGameForeignKey")]
+    partial class TeamGameForeignKey
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,20 +24,36 @@ namespace BillardHazard.Migrations
 
             modelBuilder.Entity("BillardHazard.Models.Game", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Game", (string)null);
                 });
 
+            modelBuilder.Entity("BillardHazard.Models.HighScore", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("HighScore", (string)null);
+                });
+
             modelBuilder.Entity("BillardHazard.Models.Rule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Explanation")
                         .HasColumnType("longtext");
@@ -49,12 +65,21 @@ namespace BillardHazard.Migrations
 
             modelBuilder.Entity("BillardHazard.Models.Team", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    b.Property<int?>("GameId")
-                        .HasColumnType("int");
+                    b.Property<string>("Color")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsItsTurn")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -69,16 +94,27 @@ namespace BillardHazard.Migrations
                     b.ToTable("Team", (string)null);
                 });
 
+            modelBuilder.Entity("BillardHazard.Models.HighScore", b =>
+                {
+                    b.HasOne("BillardHazard.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("BillardHazard.Models.Team", b =>
                 {
                     b.HasOne("BillardHazard.Models.Game", null)
-                        .WithMany("Equipes")
-                        .HasForeignKey("GameId");
+                        .WithMany("Teams")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BillardHazard.Models.Game", b =>
                 {
-                    b.Navigation("Equipes");
+                    b.Navigation("Teams");
                 });
 #pragma warning restore 612, 618
         }
