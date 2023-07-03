@@ -19,7 +19,7 @@ namespace BillardHazard.Pages
             _dbContext = context;
         }
 
-        public RedirectToPageResult OnPostAsync()
+        public IActionResult OnPostAsync()
         {
             Game newGame = new Game();
 
@@ -41,9 +41,9 @@ namespace BillardHazard.Pages
 
             Repository<Game> repoGame = new Repository<Game>(_dbContext);
 
-            //repoGame.Create(newGame);
+            repoGame.Create(newGame);
 
-            return RedirectToPage("/Challenge/Index");
+            return RedirectPreserveMethod($"/Challenge/{newGame.Id}");
         }
     }
 }

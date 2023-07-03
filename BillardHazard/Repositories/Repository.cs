@@ -17,12 +17,12 @@ namespace BillardHazard.Repositories
             return _dbContext.Set<T>().ToList();
         }
 
-        public T? FindById(int id)
+        public T? FindById(Guid id)
         {
             return _dbContext.Set<T>().Find(id);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             T? entity = FindById(id);
 

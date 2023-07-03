@@ -1,4 +1,4 @@
-﻿@page "{teamNumber:int}"
+﻿@page "{gameId:guid}"
 @model IndexModel
 
 @{
@@ -96,7 +96,9 @@
             switch (event.which) {
                 //Enter
                 case 13:
-                    btnGo.click();
+                    if (challengeDiceCounter > -1){
+                        btnGo.click();
+                    }
                     break;
                 //Flèche gauche
                 case 37:
