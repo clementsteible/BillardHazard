@@ -23,7 +23,7 @@ namespace BillardHazard.Pages.Rule
         [BindProperty]
         public Models.Rule Rule { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null || _context.Rules == null)
             {
@@ -69,7 +69,7 @@ namespace BillardHazard.Pages.Rule
             return RedirectToPage("./Index");
         }
 
-        private bool RuleExists(int id)
+        private bool RuleExists(Guid id)
         {
           return (_context.Rules?.Any(e => e.Id == id)).GetValueOrDefault();
         }

@@ -2,28 +2,46 @@
 @model BillardHazard.Pages.IndexModel
 
 @{
-    ViewData["Title"] = "Choisis ta couleur";
+    ViewData["Title"] = "Billard Hazard";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<div class="container">
-    <div class="row">
-        <div class="col-xl">
-            <a asp-page="/Challenge/Index" asp-route-teamNumber="1">
-                <section class="stage">
-                    <figure class="ball yellowBall"><span class="shadow"></span></figure>
-                </section>
-            </a>
-        </div>
-        <div class="col-xl">
-            <a asp-page="/Challenge/Index" asp-route-teamNumber="2">
-                <section class="stage">
-                    <figure class="ball redBall"><span class="shadow"></span></figure>
-                </section>
-            </a>
+<form method="post">
+    <div class="container">
+        <p>Choisissez des noms d'équipe et cliquez sur la boule de la couleur de l'équipe qui commence la partie</p>
+        <div class="row">
+            <div class="col-xl">
+                <div>
+                    <input placeholder="Nom de l'équipe jaune" required name="yellowTeamName" type="text" />
+                </div>
+                <div>
+                    <section class="stage pointer" id="yellowBallSection" title="Sélectionner l'équipe Jaune (Flèche gauche)">
+                        <figure class="ball yellowBall">
+                            <span class="shadow"></span>
+                        </figure>
+                    </section>
+                </div>
+            </div>
+            <div class="col-xl">
+                <div>
+                    <input placeholder="Nom de l'équipe rouge" required name="redTeamName" type="text" />
+                </div>
+                <div>
+                    <section class="stage pointer" id="redBallSection" title="Sélectionner l'équipe Rouge (Flèche droite)">
+                        <figure class="ball redBall">
+                            <span class="shadow"></span>
+                        </figure>
+                    </section>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+    <input type="radio" name="firstTeam" id="yellowTeamFirst" value="@Model.YELLOW_TEAM" required hidden />
+    <input type="radio" name="firstTeam" id="redTeamFirst" value="@Model.RED_TEAM" required hidden />
+
+    <button id="btnSubmit" type="submit" class="btn btn-dark btn-lg" title="Commencer la partie (Entrée)">GO</button>
+</form>
+
+<script src="~/js/home.js" asp-append-version="true"></script>
 
 

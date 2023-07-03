@@ -21,7 +21,7 @@ namespace BillardHazard.Pages.Rule
 
       public Models.Rule Rule { get; set; } = default!; 
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null || _context.Rules == null)
             {

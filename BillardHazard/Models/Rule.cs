@@ -5,7 +5,7 @@ namespace BillardHazard.Models;
 
 public partial class Rule
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string? Explanation { get; set; }
 }

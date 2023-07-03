@@ -13,9 +13,9 @@ namespace BillardHazard.Pages.HighScore
 {
     public class EditModel : PageModel
     {
-        private readonly BillardHazard.BhContext _context;
+        private readonly BhContext _context;
 
-        public EditModel(BillardHazard.BhContext context)
+        public EditModel(BhContext context)
         {
             _context = context;
         }

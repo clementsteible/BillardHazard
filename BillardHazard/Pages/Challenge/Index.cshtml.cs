@@ -27,7 +27,8 @@ namespace BillardHazard.Pages.Challenge
         public Team OpponentTeam { get; set; } = new Team();
         public string CssBallColorClass { get; set; }
 
-        public async Task OnGetAsync(int teamNumber)
+        /*
+        public async Task OnGetAsync(int teamNumber, Game game)
         {
             if (_context.Rules != null)
             {
@@ -35,16 +36,20 @@ namespace BillardHazard.Pages.Challenge
 
                 JsonRules = JsonSerializer.Serialize(Rule, new JsonSerializerOptions { WriteIndented = true });
 
-                var ballColorStatut = (CssClassBallEnum)teamNumber;
-                CssBallColorClass = ballColorStatut.ToString();
+                this.ActualTeam = game.Teams.ToList().First(t => t.Number == teamNumber);
+                this.OpponentTeam = game.Teams.ToList().First(t => t.Number != teamNumber);
+            }
+        }
+        */
 
-                var actualTeamColorStatut = (TeamEnum)teamNumber;
-                ActualTeam.Color = actualTeamColorStatut.ToString();
-                ActualTeam.Number = teamNumber;
+        //Temporaire TODO Remove when ok
+        public async Task OnGetAsync(int teamNumber)
+        {
+            if (_context.Rules != null)
+            {
+                Rule = await _context.Rules.ToListAsync();
 
-                OpponentTeam.Number = teamNumber == 1 ? 2 : 1;
-                var oponentTeamColorStatut = (TeamEnum) OpponentTeam.Number;
-                OpponentTeam.Color = oponentTeamColorStatut.ToString();
+                JsonRules = JsonSerializer.Serialize(Rule, new JsonSerializerOptions { WriteIndented = true });
             }
         }
 

@@ -2,7 +2,7 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = string.Format("Au tour de l'équipe {0} : {1}", Model.ActualTeam.Color, Model.ActualTeam.Name);
+    ViewData["Title"] = string.Format("Au tour de l'équipe {0} :\r\n{1}", Model.ActualTeam.Color, Model.ActualTeam.Name);
 }
 
 <h1>@ViewData["Title"]</h1>

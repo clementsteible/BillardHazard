@@ -1,6 +1,6 @@
 ﻿namespace BillardHazard.Tools
 {
-    enum TeamEnum
+    enum ColorTeamEnum
     {
         Jaune = 1,
         Rouge = 2

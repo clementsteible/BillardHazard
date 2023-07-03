@@ -22,7 +22,7 @@ namespace BillardHazard.Pages.Rule
         [BindProperty]
       public Models.Rule Rule { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null || _context.Rules == null)
             {
@@ -42,7 +42,7 @@ namespace BillardHazard.Pages.Rule
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(Guid? id)
         {
             if (id == null || _context.Rules == null)
             {
