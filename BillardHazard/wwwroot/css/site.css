@@ -32,6 +32,12 @@ footer {
 /*************/
 /* Page Défi*/
 /***********/
+
+#challengeStateDescritption {
+    text-decoration: none;
+    color: black;
+}
+
 .challengeNotValidate::before {
     content: "\274C";
 }
@@ -41,17 +47,24 @@ footer {
     color: forestgreen;
 }
 
-#challengeState, #nextTeamTurn, #oneMoreTurn, #btnDice {
-    font-size: 2rem;
+#challengeState, #btnDice, #nextTeamTurn, #oneMoreTurn {
     user-select: none;
     cursor: pointer;
 }
 
-#oneMoreTurn::before {
+#challengeState, #btnDice {
+    font-size: 2rem;
+}
+
+#nextTeamTurn, #oneMoreTurn {
+    font-size: 3rem;
+}
+
+#oneMoreTurn button::before {
     content: "\21BB";
 }
 
-#nextTeamTurn::before {
+#nextTeamTurn button::before {
     content: "\21B7";
 }
 
@@ -63,7 +76,7 @@ footer {
     --dice: "\2682";
 }
 
-#btnDice:before {
+#btnDice::before {
     content: var(--dice);
 }
 
@@ -75,4 +88,12 @@ footer {
 
 .pointer {
     cursor: pointer;
+}
+
+#tableScore td, #tableScore th {
+    border: 1px solid;
+}
+
+#tableScore {
+    min-width: 300px;
 }

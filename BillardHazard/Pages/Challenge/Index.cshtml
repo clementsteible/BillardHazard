@@ -7,29 +7,48 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<section class="stage">
-    <figure class="ball @Model.CssBallColorClass">
+<section class="stage square-150">
+    <figure class="ball @Model.CssBallCurrentColorClass">
         <span class="shadow"></span>
     </figure>
 </section>
 
 <div id="display"></div>
-<a id="btnDice"></a>
+<a id="btnDice" title="Changer le défi en cours (Espace)"></a>
 
-<div id="challengeState" class="challengeNotValidate">
-    <span id="challengeStateDescritption">Défi non-validé</span>
-</div>
+<form method="post">
+    <div id="challengeState">
+        <a title="Validé ou invalidé le défi en cours (Entrée)" id="challengeStateDescritption" class="challengeNotValidate">Défi non-validé</a>
+    </div>
+    <input hidden id="isChallengeValidate" type="radio" asp-for="IsChallengeValidate" value="true" />
+    <input hidden id="isChallengeNotValidate" type="radio" asp-for="IsChallengeValidate" value="false" />
 
-<div class="container mt-5">
-    <div class="row">
-        <div id="oneMoreTurn" asp-action="AnotherTurn" class="col-sm">
-            <a>Tour supplémentaire pour l'équipe @Model.ActualTeam.Color</a>
+    <div class="container">
+        <div class="row">
+            <div id="oneMoreTurn" class="col-sm">
+                <button id="btnOneMoreTurn" type="submit" asp-page-handler="AnotherTurn" title="Tour supplémentaire pour l'équipe @Model.ActualTeam.Color (Flèche gauche)"></button>
+            </div>
+            <div id="nextTeamTurn" class="col-sm">
+                <button id="btnNextTeamTurn" type="submit" asp-page-handler="OpponentTurn" title="Au tour de l'équipe @Model.OpponentTeam.Color (Flèche droite)"></button>
+            </div>
         </div>
-        <div id="nextTeamTurn" asp-action="OpponentTurn" class="col-sm">
-            <a>Au tour de l'équipe @Model.OpponentTeam.Color</a>
+        <div class="row d-flex justify-content-center align-content-center">
+            <table id="tableScore" class="w-25 mt-5">
+                <tr>
+                    <th colspan="2">SCORES</th>
+                </tr>
+                <tr>
+                    <th colspan="1">@Model.ActualTeam.Name (@Model.ActualTeam.Color)</th>
+                    <th colspan="1">@Model.OpponentTeam.Name (@Model.OpponentTeam.Color)</th>
+                </tr>
+                <tr>
+                    <td colspan="1">@Model.ActualTeam.Score</td>
+                    <td colspan="1">@Model.OpponentTeam.Score</td>
+                </tr>
+            </table>
         </div>
     </div>
-</div>
+</form>
 
 <script>
     window.addEventListener('load', function () {
@@ -56,25 +75,34 @@
         }
 
         btnDice.addEventListener("click", function () { DisplaysRandomRule(); ChallengeDiceDecrease(); });
+        
         //Afficher la rule
         DisplaysRandomRule();
 
         var challengeState = document.getElementById('challengeState');
         var challengeStateDescritption = document.getElementById('challengeStateDescritption');
 
-        var anotherTurn
+        var isChallengeValidate = document.getElementById('isChallengeValidate');
+        var isChallengeNotValidate = document.getElementById('isChallengeNotValidate');
+        //Initialisation de l'état au chargement de l'écran
+        isChallengeNotValidate.click();
 
         var root = document.querySelector(':root');
         var challengeDiceCounter = 2;
 
+        var btnOneMoreTurn = document.getElementById('btnOneMoreTurn');
+        var btnNextTeamTurn = document.getElementById('btnNextTeamTurn');
+
         function ChangeChallengeValidationState() {
-            if (challengeState.classList == 'challengeNotValidate') {
-                challengeState.classList = 'challengeValidate';
+            if (challengeStateDescritption.classList == 'challengeNotValidate') {
+                challengeStateDescritption.classList = 'challengeValidate';
                 challengeStateDescritption.innerHTML = "Défi validé";
+                isChallengeValidate.click();
             }
             else {
-                challengeState.classList = 'challengeNotValidate';
+                challengeStateDescritption.classList = 'challengeNotValidate';
                 challengeStateDescritption.innerHTML = "Défi non-validé";
+                isChallengeNotValidate.click();
             }
         }
 
@@ -108,11 +136,11 @@
                     break;
                 //Flèche gauche
                 case 37:
-                    oneMoreTurn.click();
+                    btnOneMoreTurn.click();
                     break;
                 //Flèche droite
                 case 39:
-                    nextTeamTurn.click();
+                    btnNextTeamTurn.click();
                     break;
             }
         });

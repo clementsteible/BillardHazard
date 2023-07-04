@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using BillardHazard.Tools;
 using BillardHazard.Repositories;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace BillardHazard.Pages.Challenge
 {
@@ -24,19 +25,25 @@ namespace BillardHazard.Pages.Challenge
 
         public IList<Models.Rule> Rule { get; set; } = default!;
         public string JsonRules { get; set; } = default!;
+        [TempData]
+        public Guid CurrentGameId { get; set; }
         public Game CurrentGame { get; set; }
         public Team ActualTeam { get; set; } = new Team();
         public Team OpponentTeam { get; set; } = new Team();
-        public string CssBallColorClass { get; set; }
+        public string CssBallCurrentColorClass { get; set; }
+        public string CssBallOpponentColorClass { get; set; }
         [BindProperty]
         public bool IsChallengeValidate { get; set; }
 
-        //Temporaire TODO Remove when ok
-        public async Task OnPostAsync(Guid gameId)
+        //TODO Remove when ok
+        public IActionResult OnPost(Guid gameId)
         {
             if (_context.Rules != null)
             {
-                Rule = await _context.Rules.ToListAsync();
+                Rule = _context.Rules.ToList();
+
+                TempData["CurrentGameId"] = gameId;
+                TempData.Keep();
 
                 JsonRules = JsonSerializer.Serialize(Rule, new JsonSerializerOptions { WriteIndented = true });
 
@@ -49,43 +56,58 @@ namespace BillardHazard.Pages.Challenge
                 ActualTeam = teams.First(t => t.IsItsTurn);
                 OpponentTeam = teams.First(t => !t.IsItsTurn);
 
-                CssBallColorClass = ((CssClassBallEnum)ActualTeam.Number).ToString();
+                CssBallCurrentColorClass = ((CssClassBallEnum)ActualTeam.Number).ToString();
+                CssBallOpponentColorClass = ((CssClassBallEnum)OpponentTeam.Number).ToString();
+
+                IsChallengeValidate = false;
             }
+
+            return Page();
         }
 
-        public void OnGet()
-        {
-
-        }
-
+        //Faire des Radios input pour IsChallengeValidate
         public IActionResult OnPostOpponentTurn()
         {
+            Repository<Team> repoTeam = new Repository<Team>(_context);
+
+            CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
+
+            ActualTeam = repoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
+            OpponentTeam = repoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && !t.IsItsTurn);
+
             if (IsChallengeValidate)
             {
                 ActualTeam.Score++;
             }
-            
+
             ActualTeam.IsItsTurn = !ActualTeam.IsItsTurn;
             OpponentTeam.IsItsTurn = !OpponentTeam.IsItsTurn;
 
-            Repository<Team> repoTeam = new Repository<Team>(_context);
             repoTeam.Update(ActualTeam);
             repoTeam.Update(OpponentTeam);
 
-            return RedirectPreserveMethod($"/Challenge/{CurrentGame.Id}");
+            return RedirectPreserveMethod($"/Challenge/{CurrentGameId}");
         }
 
+        /// <summary>
+        /// Tour Supplémentaire pour l'équipe actuelle
+        /// </summary>
+        /// <returns></returns>
         public IActionResult OnPostAnotherTurn()
         {
+            CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
+
             if (IsChallengeValidate)
             {
-                ActualTeam.Score++;
-
                 Repository<Team> repoTeam = new Repository<Team>(_context);
+
+                ActualTeam = repoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
+
+                ActualTeam.Score++;
                 repoTeam.Update(ActualTeam);
             }
 
-            return RedirectPreserveMethod($"/Challenge/{CurrentGame.Id}");
+            return RedirectPreserveMethod($"/Challenge/{CurrentGameId}");
         }
     }
 }

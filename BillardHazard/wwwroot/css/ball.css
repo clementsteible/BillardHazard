@@ -1,10 +1,18 @@
 ﻿.stage {
-    width: 300px;
-    height: 300px;
     display: inline-block;
     margin: 20px;
     perspective: 1200px;
     perspective-origin: 50% 50%;
+}
+
+.square-300 {
+    width: 300px;
+    height: 300px;
+}
+
+.square-150 {
+    width: 150px;
+    height: 150px;
 }
 
 .ball {
@@ -12,8 +20,8 @@
     background: black;
     margin: 0;
     border-radius: 50%;
-    height: 300px;
-    width: 300px;
+    height: 100%;
+    width: 100%;
 }
 
 .redBall {
