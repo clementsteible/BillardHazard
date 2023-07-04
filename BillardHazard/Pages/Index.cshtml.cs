@@ -4,15 +4,22 @@ using BillardHazard.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BillardHazard.Pages
 {
     public class IndexModel : PageModel
     {
-        public readonly string YELLOW_TEAM = "yellowTeam";
-        public readonly string RED_TEAM = "redTeam";
-
         private readonly BhContext _dbContext;
+
+        [Required, StringLength(25), BindProperty]
+        public string? RedTeamName {get; set; }
+
+        [Required, StringLength(25), BindProperty]
+        public string? YellowTeamName { get; set; }
+
+        [Required, BindProperty]
+        public bool IsYellowFirst {get; set; }
 
         public IndexModel(BhContext context)
         {
@@ -26,13 +33,13 @@ namespace BillardHazard.Pages
             Team yellowTeam = new Team();
             Team redTeam = new Team();
 
-            yellowTeam.Name = Request.Form["yellowTeamName"];
-            yellowTeam.IsItsTurn = Request.Form["firstTeam"] == YELLOW_TEAM;
+            yellowTeam.Name = YellowTeamName;
+            yellowTeam.IsItsTurn = IsYellowFirst;
             yellowTeam.Number = (int)ColorTeamEnum.Jaune;
             yellowTeam.Color = ((ColorTeamEnum)yellowTeam.Number).ToString();
 
-            redTeam.Name = Request.Form["redTeamName"];
-            redTeam.IsItsTurn = Request.Form["firstTeam"] == RED_TEAM;
+            redTeam.Name = RedTeamName;
+            redTeam.IsItsTurn = !IsYellowFirst;
             redTeam.Number = (int)ColorTeamEnum.Rouge;
             redTeam.Color = ((ColorTeamEnum)redTeam.Number).ToString();
 

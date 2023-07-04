@@ -41,7 +41,7 @@ footer {
     color: forestgreen;
 }
 
-#challengeState, #nextTeamTurn, #oneMoreTurn, #btnGo {
+#challengeState, #nextTeamTurn, #oneMoreTurn, #btnDice {
     font-size: 2rem;
     user-select: none;
     cursor: pointer;
@@ -55,7 +55,7 @@ footer {
     content: "\21B7";
 }
 
-#btnGo {
+#btnDice {
     font-size: 3rem;
 }
 
@@ -63,7 +63,7 @@ footer {
     --dice: "\2682";
 }
 
-#btnGo:before {
+#btnDice:before {
     content: var(--dice);
 }
 

@@ -24,12 +24,12 @@ namespace BillardHazard.Pages.Challenge
 
         public IList<Models.Rule> Rule { get; set; } = default!;
         public string JsonRules { get; set; } = default!;
+        public Game CurrentGame { get; set; }
         public Team ActualTeam { get; set; } = new Team();
         public Team OpponentTeam { get; set; } = new Team();
         public string CssBallColorClass { get; set; }
         [BindProperty]
         public bool IsChallengeValidate { get; set; }
-        public Game CurrentGame { get; set; }
 
         //Temporaire TODO Remove when ok
         public async Task OnPostAsync(Guid gameId)
@@ -60,31 +60,30 @@ namespace BillardHazard.Pages.Challenge
 
         public IActionResult OnPostOpponentTurn()
         {
-            ActualTeam.IsItsTurn = !ActualTeam.IsItsTurn;
-            
             if (IsChallengeValidate)
             {
                 ActualTeam.Score++;
             }
             
+            ActualTeam.IsItsTurn = !ActualTeam.IsItsTurn;
             OpponentTeam.IsItsTurn = !OpponentTeam.IsItsTurn;
 
-            List<Team> updateTeams = new List<Team>();
-            updateTeams.Add(ActualTeam);
-            updateTeams.Add(OpponentTeam);
+            Repository<Team> repoTeam = new Repository<Team>(_context);
+            repoTeam.Update(ActualTeam);
+            repoTeam.Update(OpponentTeam);
 
             return RedirectPreserveMethod($"/Challenge/{CurrentGame.Id}");
         }
+
         public IActionResult OnPostAnotherTurn()
         {
             if (IsChallengeValidate)
             {
                 ActualTeam.Score++;
-            }
 
-            List<Team> updateTeams = new List<Team>();
-            updateTeams.Add(ActualTeam);
-            updateTeams.Add(OpponentTeam);
+                Repository<Team> repoTeam = new Repository<Team>(_context);
+                repoTeam.Update(ActualTeam);
+            }
 
             return RedirectPreserveMethod($"/Challenge/{CurrentGame.Id}");
         }

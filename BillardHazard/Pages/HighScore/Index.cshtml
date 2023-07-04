@@ -13,12 +13,24 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HighScore[0].TeamName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HighScore[0].Score)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.HighScore) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score)
+            </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |

@@ -2,17 +2,19 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = string.Format("Au tour de l'équipe {0} :\r\n{1}", Model.ActualTeam.Color, Model.ActualTeam.Name);
+    ViewData["Title"] = $"Au tour de l'équipe {Model.ActualTeam.Name} ({Model.ActualTeam.Color})";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <section class="stage">
-    <figure class="ball @Model.CssBallColorClass"><span class="shadow"></span></figure>
+    <figure class="ball @Model.CssBallColorClass">
+        <span class="shadow"></span>
+    </figure>
 </section>
 
 <div id="display"></div>
-<a id="btnGo"></a>
+<a id="btnDice"></a>
 
 <div id="challengeState" class="challengeNotValidate">
     <span id="challengeStateDescritption">Défi non-validé</span>
@@ -20,10 +22,10 @@
 
 <div class="container mt-5">
     <div class="row">
-        <div id="oneMoreTurn" class="col-sm">
+        <div id="oneMoreTurn" asp-action="AnotherTurn" class="col-sm">
             <a>Tour supplémentaire pour l'équipe @Model.ActualTeam.Color</a>
         </div>
-        <div id="nextTeamTurn" class="col-sm">
+        <div id="nextTeamTurn" asp-action="OpponentTurn" class="col-sm">
             <a>Au tour de l'équipe @Model.OpponentTeam.Color</a>
         </div>
     </div>
@@ -33,7 +35,7 @@
     window.addEventListener('load', function () {
 
         var display = document.getElementById("display");
-        var btnGo = document.getElementById("btnGo");
+        var btnDice = document.getElementById("btnDice");
 
         var decodedJson = decodeHtml('@Model.JsonRules');
         var rules = JSON.parse(decodedJson);
@@ -53,7 +55,7 @@
             WriteInDisplay(rules[Math.floor(Math.random() * rules.length)].Explanation);
         }
 
-        btnGo.addEventListener("click", function () { DisplaysRandomRule(); ChallengeDiceDecrease(); });
+        btnDice.addEventListener("click", function () { DisplaysRandomRule(); ChallengeDiceDecrease(); });
         //Afficher la rule
         DisplaysRandomRule();
 
@@ -86,7 +88,7 @@
             root.style.setProperty("--dice", diceCode);
 
             if (challengeDiceCounter < 0) {
-                btnGo.style.display = 'none';
+                btnDice.style.display = 'none';
             }
         }
 
@@ -96,8 +98,12 @@
             switch (event.which) {
                 //Enter
                 case 13:
-                    if (challengeDiceCounter > -1){
-                        btnGo.click();
+                    challengeState.click();
+                    break;
+                //Espace
+                case 32:
+                    if (challengeDiceCounter > -1) {
+                        btnDice.click();
                     }
                     break;
                 //Flèche gauche
@@ -107,10 +113,6 @@
                 //Flèche droite
                 case 39:
                     nextTeamTurn.click();
-                    break;
-                //Espace
-                case 32:
-                    challengeState.click();
                     break;
             }
         });

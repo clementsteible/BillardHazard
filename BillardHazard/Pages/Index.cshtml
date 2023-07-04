@@ -23,7 +23,7 @@
             </div>
             <div class="col-xl">
                 <div>
-                    <input placeholder="Nom de l'équipe rouge" required name="redTeamName" type="text" />
+                    <input asp-for="RedTeamName" placeholder="Nom de l'équipe rouge" />
                 </div>
                 <div>
                     <section class="stage pointer" id="redBallSection" title="Sélectionner l'équipe Rouge (Flèche droite)">
@@ -36,8 +36,8 @@
         </div>
     </div>
 
-    <input type="radio" name="firstTeam" id="yellowTeamFirst" value="@Model.YELLOW_TEAM" required hidden />
-    <input type="radio" name="firstTeam" id="redTeamFirst" value="@Model.RED_TEAM" required hidden />
+    <input type="radio" asp-for="IsYellowFirst" id="yellowTeamFirst" value="true" required hidden />
+    <input type="radio" asp-for="IsYellowFirst" id="redTeamFirst" value="false" required hidden />
 
     <button id="btnSubmit" type="submit" class="btn btn-dark btn-lg" title="Commencer la partie (Entrée)">GO</button>
 </form>

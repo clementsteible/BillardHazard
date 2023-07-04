@@ -3,6 +3,7 @@
     public class HighScore
     {
         public Guid Id { get; set; }
-        public Team? Team { get; set; }
+        public string TeamName { get; set; }
+        public int Score { get; set; }
     }
 }

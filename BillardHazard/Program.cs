@@ -29,8 +29,6 @@ using (var scope = app.Services.CreateScope())
 
     db.Database.EnsureCreated();
 
-    string[] entityNames = db.GetEntityNames();
-
     /*
     //Test repo Rule : Création, GetAll, Affichage, Modification, Suppression
     Rule rule = new Rule();
