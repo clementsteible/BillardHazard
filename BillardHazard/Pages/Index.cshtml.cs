@@ -26,7 +26,7 @@ namespace BillardHazard.Pages
             _dbContext = context;
         }
 
-        public IActionResult OnPostAsync()
+        public IActionResult OnPostAsync()       
         {
             Game newGame = new Game();
 

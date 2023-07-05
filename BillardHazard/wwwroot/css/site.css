@@ -47,17 +47,21 @@ footer {
     color: forestgreen;
 }
 
-#challengeState, #btnDice, #nextTeamTurn, #oneMoreTurn {
+#challengeState, #btnDice, #oneMoreTurn button::before, #nextTeamTurn button::before {
     user-select: none;
     cursor: pointer;
 }
 
-#challengeState, #btnDice {
+#challengeState, #display {
     font-size: 2rem;
 }
 
-#nextTeamTurn, #oneMoreTurn {
+#nextTeamTurn button::before, #oneMoreTurn button::before {
     font-size: 3rem;
+}
+
+#btnDice {
+    font-size: 4rem;
 }
 
 #oneMoreTurn button::before {
@@ -66,10 +70,6 @@ footer {
 
 #nextTeamTurn button::before {
     content: "\21B7";
-}
-
-#btnDice {
-    font-size: 3rem;
 }
 
 :root{
@@ -81,7 +81,6 @@ footer {
 }
 
 #display {
-    font-size: 2rem;
     border: 2px solid;
     border-radius: 16px;
 }

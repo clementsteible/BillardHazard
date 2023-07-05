@@ -25,7 +25,6 @@ namespace BillardHazard.Pages.Challenge
 
         public IList<Models.Rule> Rule { get; set; } = default!;
         public string JsonRules { get; set; } = default!;
-        [TempData]
         public Guid CurrentGameId { get; set; }
         public Game CurrentGame { get; set; }
         public Team ActualTeam { get; set; } = new Team();
@@ -43,7 +42,7 @@ namespace BillardHazard.Pages.Challenge
                 Rule = _context.Rules.ToList();
 
                 TempData["CurrentGameId"] = gameId;
-                TempData.Keep();
+                TempData.Keep("CurrentGameId");
 
                 JsonRules = JsonSerializer.Serialize(Rule, new JsonSerializerOptions { WriteIndented = true });
 

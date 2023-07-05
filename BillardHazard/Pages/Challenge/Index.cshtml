@@ -26,10 +26,10 @@
     <div class="container">
         <div class="row">
             <div id="oneMoreTurn" class="col-sm">
-                <button id="btnOneMoreTurn" type="submit" asp-page-handler="AnotherTurn" title="Tour supplémentaire pour l'équipe @Model.ActualTeam.Color (Flèche gauche)"></button>
+                <button id="btnOneMoreTurn" class="pointer" type="submit" asp-page-handler="AnotherTurn" title="Tour supplémentaire pour l'équipe @Model.ActualTeam.Color (Flèche gauche)"></button>
             </div>
             <div id="nextTeamTurn" class="col-sm">
-                <button id="btnNextTeamTurn" type="submit" asp-page-handler="OpponentTurn" title="Au tour de l'équipe @Model.OpponentTeam.Color (Flèche droite)"></button>
+                <button id="btnNextTeamTurn" class="pointer" type="submit" asp-page-handler="OpponentTurn" title="Au tour de l'équipe @Model.OpponentTeam.Color (Flèche droite)"></button>
             </div>
         </div>
         <div class="row d-flex justify-content-center align-content-center">
