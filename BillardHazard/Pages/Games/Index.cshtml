@@ -10,16 +10,19 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<p>
+    <a asp-page-handler="EraseAllGames">Erase all Games and Teams</a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Game[0].Id)
+                @Html.DisplayNameFor(model => model.Games[0].Id)
             </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Game) {
+@foreach (var item in Model.Games) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)

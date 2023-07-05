@@ -1,5 +1,5 @@
 ﻿@page
-@model BillardHazard.Pages.HighScore.IndexModel
+@model BillardHazard.Pages.HighScores.IndexModel
 
 @{
     ViewData["Title"] = "Hall of fame !";
@@ -14,19 +14,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.HighScore[0].Id)
+                @Html.DisplayNameFor(model => model.HighScores[0].Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HighScore[0].TeamName)
+                @Html.DisplayNameFor(model => model.HighScores[0].TeamName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HighScore[0].Score)
+                @Html.DisplayNameFor(model => model.HighScores[0].Score)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.HighScore) {
+@foreach (var item in Model.HighScores) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)

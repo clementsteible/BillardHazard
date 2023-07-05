@@ -21,7 +21,12 @@ namespace BillardHazard.Pages.Challenge
         public IndexModel(BhContext context)
         {
             _context = context;
+            RepoTeam = new Repository<Team>(_context);
+            RepoGame = new Repository<Game>(_context);
         }
+
+        Repository<Team> RepoTeam { get; set; }
+        Repository<Game> RepoGame { get; set; }
 
         public IList<Models.Rule> Rule { get; set; } = default!;
         public string JsonRules { get; set; } = default!;
@@ -46,11 +51,8 @@ namespace BillardHazard.Pages.Challenge
 
                 JsonRules = JsonSerializer.Serialize(Rule, new JsonSerializerOptions { WriteIndented = true });
 
-                Repository<Game> repoGame = new Repository<Game>(_context);
-                Repository<Team> repoTeam = new Repository<Team>(_context);
-
-                CurrentGame = repoGame.FindById(gameId) ?? new Game();
-                List<Team> teams = repoTeam.GetAll().Where(t => t.GameId == gameId).ToList();
+                CurrentGame = RepoGame.FindById(gameId) ?? new Game();
+                List<Team> teams = RepoTeam.GetAll().Where(t => t.GameId == gameId).ToList();
 
                 ActualTeam = teams.First(t => t.IsItsTurn);
                 OpponentTeam = teams.First(t => !t.IsItsTurn);
@@ -67,12 +69,10 @@ namespace BillardHazard.Pages.Challenge
         //Faire des Radios input pour IsChallengeValidate
         public IActionResult OnPostOpponentTurn()
         {
-            Repository<Team> repoTeam = new Repository<Team>(_context);
-
             CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
 
-            ActualTeam = repoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
-            OpponentTeam = repoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && !t.IsItsTurn);
+            ActualTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
+            OpponentTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && !t.IsItsTurn);
 
             if (IsChallengeValidate)
             {
@@ -82,8 +82,8 @@ namespace BillardHazard.Pages.Challenge
             ActualTeam.IsItsTurn = !ActualTeam.IsItsTurn;
             OpponentTeam.IsItsTurn = !OpponentTeam.IsItsTurn;
 
-            repoTeam.Update(ActualTeam);
-            repoTeam.Update(OpponentTeam);
+            RepoTeam.Update(ActualTeam);
+            RepoTeam.Update(OpponentTeam);
 
             return RedirectPreserveMethod($"/Challenge/{CurrentGameId}");
         }
@@ -98,15 +98,33 @@ namespace BillardHazard.Pages.Challenge
 
             if (IsChallengeValidate)
             {
-                Repository<Team> repoTeam = new Repository<Team>(_context);
-
-                ActualTeam = repoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
+                ActualTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
 
                 ActualTeam.Score++;
-                repoTeam.Update(ActualTeam);
+                RepoTeam.Update(ActualTeam);
             }
 
             return RedirectPreserveMethod($"/Challenge/{CurrentGameId}");
+        }
+
+        /// <summary>
+        /// Déclenche la fin de partie
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult OnPostEndGame()
+        {
+            CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
+            TempData.Remove("CurrentGameId");
+
+            if (IsChallengeValidate)
+            {
+                ActualTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
+
+                ActualTeam.Score++;
+                RepoTeam.Update(ActualTeam);
+            }
+
+            return RedirectPreserveMethod($"/EndGame/{CurrentGameId}");
         }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BillardHazard;
 using BillardHazard.Models;
 
-namespace BillardHazard.Pages.HighScore
+namespace BillardHazard.Pages.HighScores
 {
     public class EditModel : PageModel
     {

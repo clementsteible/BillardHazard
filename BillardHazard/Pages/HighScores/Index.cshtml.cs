@@ -8,24 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using BillardHazard;
 using BillardHazard.Models;
 
-namespace BillardHazard.Pages.HighScore
+namespace BillardHazard.Pages.HighScores
 {
     public class IndexModel : PageModel
     {
-        private readonly BillardHazard.BhContext _context;
+        private readonly BhContext _context;
 
-        public IndexModel(BillardHazard.BhContext context)
+        public IndexModel(BhContext context)
         {
             _context = context;
         }
 
-        public IList<Models.HighScore> HighScore { get;set; } = default!;
+        public IList<HighScore> HighScores { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             if (_context.HighScores != null)
             {
-                HighScore = await _context.HighScores.ToListAsync();
+                HighScores = await _context.HighScores.ToListAsync();
+                HighScores = HighScores.OrderByDescending(hs => hs.Score).ToList();
             }
         }
     }

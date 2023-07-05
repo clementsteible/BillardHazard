@@ -1,0 +1,52 @@
+﻿@page "{gameId:guid}"
+@model EndGameModel
+@{
+}
+
+<h1>@Model.Message</h1>
+
+<div class="container">
+    <div class="row justify-content-center align-content-center">
+        <table id="tableScore" class="w-25 mt-5">
+            <tr>
+                <th colspan="2">SCORES</th>
+            </tr>
+            <tr>
+                <th colspan="1">@Model.RedTeam.Name (@Model.RedTeam.Color)</th>
+                <th colspan="1">@Model.YellowTeam.Name (@Model.YellowTeam.Color)</th>
+            </tr>
+            <tr>
+                <td colspan="1">@Model.RedTeam.Score</td>
+                <td colspan="1">@Model.YellowTeam.Score</td>
+            </tr>
+        </table>
+    </div>
+    <div class="row">
+        <h2 class="mt-5">High scores</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HighScores[0].TeamName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HighScores[0].Score)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.HighScores)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TeamName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Score)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

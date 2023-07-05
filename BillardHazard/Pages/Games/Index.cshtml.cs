@@ -7,26 +7,46 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillardHazard;
 using BillardHazard.Models;
+using BillardHazard.Repositories;
 
 namespace BillardHazard.Pages.Games
 {
     public class IndexModel : PageModel
     {
-        private readonly BillardHazard.BhContext _context;
+        private readonly BhContext _context;
 
-        public IndexModel(BillardHazard.BhContext context)
+        public IndexModel(BhContext context)
         {
             _context = context;
         }
 
-        public IList<Game> Game { get;set; } = default!;
+        public IList<Game> Games { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             if (_context.Games != null)
             {
-                Game = await _context.Games.ToListAsync();
+                Games = await _context.Games.ToListAsync();
             }
+        }
+
+        public IActionResult OnGetEraseAllGames()
+        {
+            IList<Team> teams = _context.Teams.ToList();
+
+            foreach (Team team in teams)
+            {
+                _context.Remove(team);
+            }
+
+            foreach (Game game in Games)
+            {
+                _context.Remove(game);
+            }
+
+            _context.SaveChanges();
+
+            return Page();
         }
     }
 }

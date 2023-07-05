@@ -14,7 +14,7 @@
 </section>
 
 <div id="display"></div>
-<a id="btnDice" title="Changer le défi en cours (Espace)"></a>
+<button id="btnDice" class="btn" title="Changer le défi en cours (Espace)"></button>
 
 <form method="post">
     <div id="challengeState">
@@ -26,13 +26,13 @@
     <div class="container">
         <div class="row">
             <div id="oneMoreTurn" class="col-sm">
-                <button id="btnOneMoreTurn" class="pointer" type="submit" asp-page-handler="AnotherTurn" title="Tour supplémentaire pour l'équipe @Model.ActualTeam.Color (Flèche gauche)"></button>
+                <button id="btnOneMoreTurn" class="pointer btn" type="submit" asp-page-handler="AnotherTurn" title="Tour supplémentaire pour l'équipe @Model.ActualTeam.Color (Flèche gauche)"></button>
             </div>
             <div id="nextTeamTurn" class="col-sm">
-                <button id="btnNextTeamTurn" class="pointer" type="submit" asp-page-handler="OpponentTurn" title="Au tour de l'équipe @Model.OpponentTeam.Color (Flèche droite)"></button>
+                <button id="btnNextTeamTurn" class="pointer btn" type="submit" asp-page-handler="OpponentTurn" title="Au tour de l'équipe @Model.OpponentTeam.Color (Flèche droite)"></button>
             </div>
         </div>
-        <div class="row d-flex justify-content-center align-content-center">
+        <div class="row justify-content-center align-content-center">
             <table id="tableScore" class="w-25 mt-5">
                 <tr>
                     <th colspan="2">SCORES</th>
@@ -46,6 +46,11 @@
                     <td colspan="1">@Model.OpponentTeam.Score</td>
                 </tr>
             </table>
+        </div>
+        <div class="row">
+            <div class="ws-25 mt-5">
+                <button id="btnEndGame" asp-page-handler="EndGame" title="Déclenche la fin de partie. (Échape)" type="submit" class="btn btn-dark">Fin de partie</button>
+            </div>
         </div>
     </div>
 </form>
@@ -76,7 +81,7 @@
 
         btnDice.addEventListener("click", function () { DisplaysRandomRule(); ChallengeDiceDecrease(); });
         
-        //Afficher la rule
+        //Afficher la règle du défi
         DisplaysRandomRule();
 
         var challengeState = document.getElementById('challengeState');
@@ -92,6 +97,8 @@
 
         var btnOneMoreTurn = document.getElementById('btnOneMoreTurn');
         var btnNextTeamTurn = document.getElementById('btnNextTeamTurn');
+
+        var btnEndGame = document.getElementById('btnEndGame');
 
         function ChangeChallengeValidationState() {
             if (challengeStateDescritption.classList == 'challengeNotValidate') {
@@ -141,6 +148,10 @@
                 //Flèche droite
                 case 39:
                     btnNextTeamTurn.click();
+                    break;
+                //Échape
+                case 27:
+                    btnEndGame.click();
                     break;
             }
         });
