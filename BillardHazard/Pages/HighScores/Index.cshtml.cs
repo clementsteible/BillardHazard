@@ -29,5 +29,18 @@ namespace BillardHazard.Pages.HighScores
                 HighScores = HighScores.OrderByDescending(hs => hs.Score).ToList();
             }
         }
+
+        public IActionResult OnGetEraseAllHighScores()
+        {
+            IList<HighScore> highScores = _context.HighScores.ToList();
+
+            foreach (var highScore in highScores) {
+                _context.Remove(highScore);
+            }
+
+            _context.SaveChanges();
+
+            return Page();
+        }
     }
 }

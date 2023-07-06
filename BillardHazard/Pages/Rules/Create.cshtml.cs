@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BillardHazard;
 using BillardHazard.Models;
 
-namespace BillardHazard.Pages.Rule
+namespace BillardHazard.Pages.Rules
 {
     public class CreateModel : PageModel
     {

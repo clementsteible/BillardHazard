@@ -4,6 +4,7 @@ using BillardHazard.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Text;
 using System.Text;
 
 namespace BillardHazard.Pages
@@ -16,22 +17,22 @@ namespace BillardHazard.Pages
         public Team YellowTeam { get; set; }
 
         public IList<HighScore> HighScores { get; set; } = default!;
+        public Repository<Team> RepoTeam { get; set; }
+        public Repository<Game> RepoGame { get; set; }
 
         public EndGameModel(BhContext context)
         {
             _context = context;
+
+            RepoTeam = new Repository<Team>(_context);
+            RepoGame = new Repository<Game>(_context);
         }
 
         public IActionResult OnPost(Guid gameId)
         {
+            SetHighScoresTable();
 
-            HighScores = _context.HighScores.ToList();
-            HighScores = HighScores.OrderByDescending(hs => hs.Score).ToList();
-
-            Repository<Team> repoTeam = new Repository<Team>(_context);
-            Repository<Game> repoGame = new Repository<Game>(_context);
-
-            List<Team> teams = repoTeam.GetAll().Where(t => t.GameId == gameId).ToList();
+            List<Team> teams = RepoTeam.GetAll().Where(t => t.GameId == gameId).ToList();
 
             Team winnerTeam = teams.OrderByDescending(t => t.Score).First();
             Message = $"L'équipe {winnerTeam.Name} ({winnerTeam.Color}) remporte la partie !";
@@ -42,12 +43,14 @@ namespace BillardHazard.Pages
             foreach (Team team in teams)
             {
                 SetHighScore(team);
-                repoTeam.Delete(team);
+                RepoTeam.Delete(team);
             }
             
-            Game game = repoGame.FindById(gameId);
+            Game game = RepoGame.FindById(gameId);
 
-            repoGame.Delete(game);
+            RepoGame.Delete(game);
+
+            SetHighScoresTable();
 
             return Page();
         }
@@ -73,6 +76,12 @@ namespace BillardHazard.Pages
                     repoHighScore.Delete(worstHighScore);
                 }
             }
+        }
+
+        private void SetHighScoresTable()
+        {
+            HighScores = _context.HighScores.ToList();
+            HighScores = HighScores.OrderByDescending(hs => hs.Score).ToList();
         }
     }
 }

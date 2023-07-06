@@ -33,13 +33,14 @@ namespace BillardHazard.Pages.Games
         public IActionResult OnGetEraseAllGames()
         {
             IList<Team> teams = _context.Teams.ToList();
+            IList<Game> games = _context.Games.ToList();
 
             foreach (Team team in teams)
             {
                 _context.Remove(team);
             }
 
-            foreach (Game game in Games)
+            foreach (Game game in games)
             {
                 _context.Remove(game);
             }

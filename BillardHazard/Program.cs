@@ -13,6 +13,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.RootDirectory = "/Pages";
+    options.Conventions.AddPageRoute("/Games/Index", "Games/{text?}");
 });
 
 builder.Services.AddDbContext<BhContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));

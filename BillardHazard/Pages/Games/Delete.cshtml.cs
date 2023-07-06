@@ -19,7 +19,7 @@ namespace BillardHazard.Pages.Games
             _context = context;
         }
 
-        [BindProperty]
+      [BindProperty]
       public Game Game { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -48,10 +48,21 @@ namespace BillardHazard.Pages.Games
             {
                 return NotFound();
             }
+
             var game = await _context.Games.FindAsync(id);
 
             if (game != null)
             {
+                List<Team> teamsAssociated = _context.Teams.Where(t => t.GameId == id).ToList();
+                
+                if (teamsAssociated != null && teamsAssociated.Count > 0)
+                {
+                    foreach (Team team in teamsAssociated)
+                    {
+                        _context.Teams.Remove(team);
+                    }
+                }
+
                 Game = game;
                 _context.Games.Remove(Game);
                 await _context.SaveChangesAsync();

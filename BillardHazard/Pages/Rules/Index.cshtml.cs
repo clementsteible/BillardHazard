@@ -8,25 +8,39 @@ using Microsoft.EntityFrameworkCore;
 using BillardHazard;
 using BillardHazard.Models;
 
-namespace BillardHazard.Pages.Rule
+namespace BillardHazard.Pages.Rules
 {
     public class IndexModel : PageModel
     {
-        private readonly BillardHazard.BhContext _context;
+        private readonly BhContext _context;
 
-        public IndexModel(BillardHazard.BhContext context)
+        public IndexModel(BhContext context)
         {
             _context = context;
         }
 
-        public IList<Models.Rule> Rule { get;set; } = default!;
+        public IList<Rule> Rules { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             if (_context.Rules != null)
             {
-                Rule = await _context.Rules.ToListAsync();
+                Rules = await _context.Rules.ToListAsync();
             }
+        }
+
+        public IActionResult OnGetEraseAllRules()
+        {
+            List<Rule> rules = _context.Rules.ToList();
+
+            foreach (Rule rule in rules)
+            {
+                _context.Remove(rule);
+            }
+
+            _context.SaveChanges();
+
+            return Page();
         }
     }
 }
