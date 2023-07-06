@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillardHazard;
 using BillardHazard.Models;
+using BillardHazard.Tools;
 
 namespace BillardHazard.Pages.HighScores
 {
