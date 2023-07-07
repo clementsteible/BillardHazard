@@ -5,16 +5,21 @@ using BillardHazard.Tools;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
+using Microsoft.AspNetCore.Identity;
+using BillardHazard.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("IdentityDbContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityDbContextConnection' not found.");
 
-// Add services to the container.
+// Add services to the container + Mettre les authorisations sur les pages
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizePage("/HighScores/Create");
     options.Conventions.AuthorizePage("/HighScores/Delete");
     options.Conventions.AuthorizePage("/HighScores/Edit");
     options.Conventions.AuthorizePage("/HighScores/Details");
+
+    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Register");
 
     options.Conventions.AuthorizeFolder("/Games");
     options.Conventions.AuthorizeFolder("/Rules");
@@ -35,6 +40,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddDbContext<BhContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
+
+builder.Services.AddDbContext<IdentityDbContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
+
+builder.Services.AddDefaultIdentity<Administrator>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<IdentityDbContext>();
 
 var app = builder.Build();
 
