@@ -11,6 +11,7 @@ public class IdentityDbContext : IdentityDbContext<Administrator>
     public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
         : base(options)
     {
+
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

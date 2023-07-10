@@ -28,22 +28,27 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AllowAnonymousToFolder("/Challenge");
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole",
+         policy => policy.RequireRole(Constants.ADMIN));
+});
+
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.RootDirectory = "/Pages";
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdministratorRole",
-         policy => policy.RequireRole("Administrator"));
-});
+builder.Services
+    .AddDbContext<BhContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
 
-builder.Services.AddDbContext<BhContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
+builder.Services
+    .AddDbContext<IdentityDbContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
 
-builder.Services.AddDbContext<IdentityDbContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
-
-builder.Services.AddDefaultIdentity<Administrator>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<IdentityDbContext>();
+builder.Services
+    .AddDefaultIdentity<Administrator>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<IdentityDbContext>();
 
 var app = builder.Build();
 
@@ -70,6 +75,40 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    var roles = new[] { Constants.ADMIN };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Administrator>>();
+
+    string username = Constants.ADMIN;
+    string password = "Root123!";
+
+    if (await userManager.FindByNameAsync(username) == null)
+    {
+        var user = new Administrator();
+        user.UserName = username;
+        user.Email = username;
+
+        await userManager.CreateAsync(user, password);
+
+        await userManager.AddToRoleAsync(user, Constants.ADMIN);
+    }
+}
 
 app.MapRazorPages();
 

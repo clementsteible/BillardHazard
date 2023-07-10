@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-xl">
                 <div>
-                    <input placeholder="Nom de l'équipe jaune" required name="yellowTeamName" type="text" autofocus onfocus="this.select()" />
+                    <input placeholder="Nom de l'équipe jaune" class="form-control" required name="yellowTeamName" type="text" autofocus onfocus="this.select()" />
                 </div>
                 <div>
                     <section class="stage square-300 pointer" id="yellowBallSection" title="Sélectionner l'équipe Jaune (Flèche gauche)">
@@ -23,7 +23,7 @@
             </div>
             <div class="col-xl">
                 <div>
-                    <input asp-for="RedTeamName" placeholder="Nom de l'équipe rouge" />
+                    <input asp-for="RedTeamName" class="form-control" placeholder="Nom de l'équipe rouge" />
                 </div>
                 <div>
                     <section class="stage square-300 pointer" id="redBallSection" title="Sélectionner l'équipe Rouge (Flèche droite)">
