@@ -29,7 +29,7 @@ namespace BillardHazard.Pages.Rules
             }
         }
 
-        public IActionResult OnGetEraseAllRules()
+        public IActionResult OnPostEraseAllRules()
         {
             List<Rule> rules = _context.Rules.ToList();
 

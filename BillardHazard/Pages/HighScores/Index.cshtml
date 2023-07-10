@@ -18,10 +18,13 @@
     @if (User.IsInRole(Tools.Constants.ADMIN))
     {
         <p>
-            <a asp-page-handler="EraseAllHighScores">Erase All HighScores</a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                Erase all High scores
+            </button>
         </p>
     }
-    <table class="table">
+    <table class="table bg-white">
         <thead>
             <tr>
 
@@ -71,6 +74,29 @@
     }
         </tbody>
     </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-black" id="exampleModalLabel">Are you sure ?</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-black">
+                    Do you really want to erase all the High scores ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form method="post">
+                        <button asp-page-handler="EraseAllHighScores" type="submit" class="btn btn-danger">Delete all</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else{
     <h2>Il n'y a pas de High score !</h2>

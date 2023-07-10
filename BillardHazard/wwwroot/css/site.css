@@ -13,13 +13,21 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+}
+
+.bg-greendark {
+    background-color: #308b16;
 }
 
 body {
     margin-bottom: 60px;
     text-align: center;
+    background-color: #308b16;
+    color: white;
+    background-image: url(../img/bg.jpg);
+    background-size: cover;
 }
 
 footer {
@@ -27,6 +35,31 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+    background-image: url(../img/bg.jpg);
+}
+
+a {
+    /*
+    color: black;
+    */
+}
+
+    a:hover {
+        /*
+    color: #2d3e57; 
+            */
+}
+
+/******************/
+        /* Footer Header */
+        /****************/
+
+        .border-top-black {
+    border-top: 2px solid black;
+}
+
+.border-bottom-black {
+    border-bottom: 2px solid black;
 }
 
 /*************/
@@ -35,7 +68,20 @@ footer {
 
 #challengeStateDescritption {
     text-decoration: none;
-    color: black;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #212529 !important;
+    border-color: #212529;
+    color: white;
+}
+
+#challengeStateDescritption:hover {
+    background-color: #1c1f23 !important;
+    border-color: #1a1e21;
+}
+
+#btnEndGame{
+    font-size: 2rem;
 }
 
 .challengeNotValidate::before {

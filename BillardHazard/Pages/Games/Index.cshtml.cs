@@ -30,7 +30,7 @@ namespace BillardHazard.Pages.Games
             }
         }
 
-        public IActionResult OnGetEraseAllGames()
+        public IActionResult OnPostEraseAllGames()
         {
             IList<Team> teams = _context.Teams.ToList();
             IList<Game> games = _context.Games.ToList();

@@ -31,7 +31,7 @@ namespace BillardHazard.Pages.HighScores
             }
         }
 
-        public IActionResult OnGetEraseAllHighScores()
+        public IActionResult OnPostEraseAllHighScores()
         {
             IList<HighScore> highScores = _context.HighScores.ToList();
 

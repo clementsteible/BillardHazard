@@ -18,7 +18,7 @@
                         <div class="input-group-append">
                             <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
                         </div>
-                    <label asp-for="Username" class="form-label"></label>
+                    <label asp-for="Username" class="form-label text-secondary">Username</label>
                 </div>
             }
             else
@@ -31,10 +31,10 @@
             }
             <div class="form-floating mb-3">
                 <input asp-for="Input.NewUsername" aria-required="true" placeholder="Please enter new Username." />
-                <label asp-for="Input.NewUsername" class="form-label"></label>
+                <label asp-for="Input.NewUsername" class="form-label text-secondary">New Username</label>
                 <span asp-validation-for="Input.NewUsername" class="text-danger"></span>
             </div>
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Change Username</button>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-dark">Change Username</button>
         </form>
     </div>
 </div>
