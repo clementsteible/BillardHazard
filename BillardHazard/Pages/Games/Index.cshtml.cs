@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BillardHazard;
 using BillardHazard.Models;
-using BillardHazard.Repositories;
+using BillardHazard.Services;
 
 namespace BillardHazard.Pages.Games
 {
@@ -32,20 +27,7 @@ namespace BillardHazard.Pages.Games
 
         public IActionResult OnPostEraseAllGames()
         {
-            IList<Team> teams = _context.Teams.ToList();
-            IList<Game> games = _context.Games.ToList();
-
-            foreach (Team team in teams)
-            {
-                _context.Remove(team);
-            }
-
-            foreach (Game game in games)
-            {
-                _context.Remove(game);
-            }
-
-            _context.SaveChanges();
+            ServicesSQL.DeleteGamesAndAssociatedTeams(_context);
 
             return Page();
         }

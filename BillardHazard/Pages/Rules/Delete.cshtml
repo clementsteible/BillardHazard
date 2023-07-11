@@ -11,7 +11,7 @@
 <div>
     <h4>Rule</h4>
     <hr />
-    <dl class="row">
+    <dl class="row bg-light text-black justify-content-center align-content-center">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Rule.Explanation)
         </dt>
@@ -22,7 +22,9 @@
     
     <form method="post">
         <input type="hidden" asp-for="Rule.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-page="./Index">
+            <button class="btn btn-dark">Back to List</button>
+        </a>
     </form>
 </div>

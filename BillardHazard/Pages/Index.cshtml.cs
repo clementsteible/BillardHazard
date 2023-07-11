@@ -3,7 +3,6 @@ using BillardHazard.Repositories;
 using BillardHazard.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace BillardHazard.Pages

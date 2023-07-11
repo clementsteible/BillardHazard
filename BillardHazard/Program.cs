@@ -1,17 +1,33 @@
 using BillardHazard;
-using BillardHazard.Models;
-using BillardHazard.Repositories;
 using BillardHazard.Tools;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 using Microsoft.AspNetCore.Identity;
 using BillardHazard.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("IdentityDbContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityDbContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// Add services to the container + Mettre les authorisations sur les pages
+//Set root page
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.RootDirectory = "/Pages";
+});
+
+//Add EF Core classes to link the BDD
+builder.Services
+    .AddDbContext<BhContext>(options => options.UseMySQL(connectionString));
+
+builder.Services
+    .AddDbContext<IdentityDbContext>(options => options.UseMySQL(connectionString));
+
+//Define required role for limited access pages
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole",
+         policy => policy.RequireRole(Constants.ADMIN));
+});
+
+//Set authorizations
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizePage("/HighScores/Create");
@@ -28,38 +44,14 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AllowAnonymousToFolder("/Challenge");
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdministratorRole",
-         policy => policy.RequireRole(Constants.ADMIN));
-});
-
-builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
-{
-    options.RootDirectory = "/Pages";
-});
-
-builder.Services
-    .AddDbContext<BhContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
-
-builder.Services
-    .AddDbContext<IdentityDbContext>(options => options.UseMySQL("Server=localhost;Database=billard_hazard;Uid=root;Pwd=root;Port=3306;"));
-
 builder.Services
     .AddDefaultIdentity<Administrator>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>();
 
+//TODO builder.Services.AddHostedService<PeriodicDeleteGamesTeams>();
+
 var app = builder.Build();
-
-//Scope permettant l'usage de la BDD + création de la Database s'il elle n'existe pas encore
-using (var scope = app.Services.CreateScope())
-{
-    var scopedServices = scope.ServiceProvider;
-    var db = scopedServices.GetRequiredService<BhContext>();
-
-    db.Database.EnsureCreated();
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -76,6 +68,16 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Create BDD if not exists
+using (var scope = app.Services.CreateScope())
+{
+    var scopedServices = scope.ServiceProvider;
+    var db = scopedServices.GetRequiredService<BhContext>();
+
+    db.Database.EnsureCreated();
+}
+
+// Create Admin role in BDD if not exists
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -91,6 +93,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Create an Admin in BDD if not exists
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Administrator>>();

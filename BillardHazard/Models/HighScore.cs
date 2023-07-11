@@ -2,8 +2,12 @@
 {
     public class HighScore
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         public string TeamName { get; set; }
         public int Score { get; set; }
+
+        public HighScore() { 
+            Id = Guid.NewGuid();
+        }
     }
 }

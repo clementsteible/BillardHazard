@@ -1,4 +1,10 @@
-﻿.stage {
+﻿
+   /******************/
+  /*  Billard ball  */
+ /*   CSS Visual   */
+/******************/
+
+.stage {
     display: inline-block;
     margin: 20px;
     perspective: 1200px;

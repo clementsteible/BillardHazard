@@ -9,9 +9,9 @@
 
 <h4>HighScore</h4>
 <hr />
-<div class="row bg-white">
+<div class="row  bg-light text-black justify-content-center align-content-center">
     <div class="col-md-4">
-        <form method="post">
+        <form name="edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="HighScore.Id" />
             <div class="form-group">
@@ -24,15 +24,12 @@
                 <input asp-for="HighScore.Score" class="form-control" />
                 <span asp-validation-for="HighScore.Score" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-dark" />
-            </div>
+            <input type="submit" value="Save" class="btn btn-success" />
         </form>
+        <a asp-page="./Index">
+            <button class="btn btn-dark">Back to List</button>
+        </a>
     </div>
-</div>
-
-<div>
-    <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using BillardHazard.Models;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using BillardHazard.Tools;
 using BillardHazard.Repositories;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace BillardHazard.Pages.Challenge
 {
@@ -28,7 +21,7 @@ namespace BillardHazard.Pages.Challenge
         Repository<Team> RepoTeam { get; set; }
         Repository<Game> RepoGame { get; set; }
 
-        public IList<Models.Rule> Rule { get; set; } = default!;
+        public IList<Rule> Rule { get; set; } = default!;
         public string JsonRules { get; set; } = default!;
         public Guid CurrentGameId { get; set; }
         public Game CurrentGame { get; set; }

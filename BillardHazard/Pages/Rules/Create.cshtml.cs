@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using BillardHazard;
-using BillardHazard.Models;
 
 namespace BillardHazard.Pages.Rules
 {
     public class CreateModel : PageModel
     {
-        private readonly BillardHazard.BhContext _context;
+        private readonly BhContext _context;
 
-        public CreateModel(BillardHazard.BhContext context)
+        public CreateModel(BhContext context)
         {
             _context = context;
         }

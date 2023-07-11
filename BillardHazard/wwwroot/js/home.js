@@ -1,3 +1,5 @@
+//JS page Home/Index/New game
+
 var redBallSection = document.getElementById('redBallSection');
 var redShadow = document.querySelector('.redBall');
 var redRadioBtn = document.getElementById('redTeamFirst');
@@ -8,6 +10,7 @@ var yellowRadioBtn = document.getElementById('yellowTeamFirst');
 
 var btnSubmit = document.getElementById('btnSubmit');
 
+//Visual choose color team
 function ClickOnYellowBall() {
     redShadow.classList.add('unselectedBall');
     yellowShadow.classList.remove('unselectedBall');
@@ -15,6 +18,7 @@ function ClickOnYellowBall() {
     yellowRadioBtn.click();
 }
 
+//Visual choose color team
 function ClickOnRedBall() {
     yellowShadow.classList.add('unselectedBall');
     redShadow.classList.remove('unselectedBall');
@@ -25,7 +29,7 @@ function ClickOnRedBall() {
 redBallSection.addEventListener("click", function () { ClickOnRedBall(); });
 yellowBallSection.addEventListener("click", function () { ClickOnYellowBall(); });
 
-//Commandes clavier
+//Keyboard commands
 window.addEventListener("keydown", function (event) {
 
     switch (event.which) {

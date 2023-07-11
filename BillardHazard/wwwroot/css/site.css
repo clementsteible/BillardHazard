@@ -51,10 +51,10 @@ a {
 }
 
 /******************/
-        /* Footer Header */
-        /****************/
+/* Footer Header */
+/****************/
 
-        .border-top-black {
+.border-top-black {
     border-top: 2px solid black;
 }
 
@@ -62,10 +62,25 @@ a {
     border-bottom: 2px solid black;
 }
 
+/*******************/
+/* Manage account */
+/*****************/
+
+.manage-nav-pills .nav-link.active, .manage-nav-pills .show > .nav-link {
+    background-color: black !important;
+}
+
+.manage-nav-pills .nav-link {
+    color: white !important;
+}
+
+.manage-nav-pills .nav-link:focus, .manage-nav-pills .nav-link:hover {
+    color: #bebebf !important;
+}
+
 /*************/
 /* Page Défi*/
 /***********/
-
 #challengeStateDescritption {
     text-decoration: none;
     padding: 0.5rem;

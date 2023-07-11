@@ -3,10 +3,6 @@ using BillardHazard.Repositories;
 using BillardHazard.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using System.Drawing.Text;
-using System.Text;
-
 namespace BillardHazard.Pages
 {
     public class EndGameModel : PageModel

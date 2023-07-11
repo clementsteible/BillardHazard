@@ -2,8 +2,15 @@
 {
     public class Game
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public ICollection<Team> Teams { get; set; } = new List<Team>();
-        private DateTime GameBegin { get; } = DateTime.Now.Date;
+        public Guid Id { get; set; }
+        public ICollection<Team> Teams { get; set; }
+        public DateTime Beginning { get; set; }
+
+        public Game()
+        {
+            Id = Guid.NewGuid();
+            Teams = new List<Team>();
+            Beginning = DateTime.Now;
+        }
     }
 }
