@@ -3,6 +3,7 @@ using BillardHazard.Tools;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BillardHazard.Areas.Identity.Data;
+using BillardHazard.TimedBackgroundTasks;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -49,7 +50,7 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>();
 
-//TODO builder.Services.AddHostedService<PeriodicDeleteGamesTeams>();
+builder.Services.AddHostedService<TimedHostedService>();
 
 var app = builder.Build();
 
