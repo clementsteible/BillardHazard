@@ -27,7 +27,7 @@ namespace BillardHazard.Pages.Games
 
         public IActionResult OnPostEraseAllGames()
         {
-            ServicesSQL.DeleteGamesAndAssociatedTeams(_context);
+            ServicesSQL.EraseAllGames(_context);
 
             return Page();
         }

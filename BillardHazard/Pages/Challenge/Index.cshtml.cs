@@ -4,12 +4,14 @@ using BillardHazard.Models;
 using System.Text.Json;
 using BillardHazard.Tools;
 using BillardHazard.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BillardHazard.Pages.Challenge
 {
     public class IndexModel : PageModel
     {
         private readonly BhContext _context;
+        private readonly int RULES_TURN_NUMBER = 4;
 
         public IndexModel(BhContext context)
         {
@@ -23,6 +25,7 @@ namespace BillardHazard.Pages.Challenge
 
         public IList<Rule> Rule { get; set; } = default!;
         public string JsonRules { get; set; } = default!;
+        public List<Rule> RulesCurrentTurn { get; set; }
         public Guid CurrentGameId { get; set; }
         public Game CurrentGame { get; set; }
         public Team ActualTeam { get; set; } = new Team();
@@ -32,15 +35,23 @@ namespace BillardHazard.Pages.Challenge
         [BindProperty]
         public bool IsChallengeValidate { get; set; }
 
-        //TODO Remove when ok
         public IActionResult OnPost(Guid gameId)
         {
             if (_context.Rules != null)
             {
                 Rule = _context.Rules.ToList();
 
+                /*
+                RulesCurrentTurn = new List<Rule>();
+                PopulateRulesTurn();
+                */
+
+                #region Save for later on page refresh
+                
                 TempData["CurrentGameId"] = gameId;
                 TempData.Keep("CurrentGameId");
+
+                #endregion
 
                 JsonRules = JsonSerializer.Serialize(Rule, new JsonSerializerOptions { WriteIndented = true });
 
@@ -59,9 +70,14 @@ namespace BillardHazard.Pages.Challenge
             return Page();
         }
 
-        //Faire des Radios input pour IsChallengeValidate
+        /// <summary>
+        /// It's the opponent turn
+        /// </summary>
+        /// <returns></returns>
         public IActionResult OnPostOpponentTurn()
         {
+            //PopulateRulesTurn();
+
             CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
 
             ActualTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
@@ -72,6 +88,7 @@ namespace BillardHazard.Pages.Challenge
                 ActualTeam.Score++;
             }
 
+            // Change turns states
             ActualTeam.IsItsTurn = !ActualTeam.IsItsTurn;
             OpponentTeam.IsItsTurn = !OpponentTeam.IsItsTurn;
 
@@ -82,26 +99,20 @@ namespace BillardHazard.Pages.Challenge
         }
 
         /// <summary>
-        /// Tour Supplémentaire pour l'équipe actuelle
+        /// One more turn for current playing team
         /// </summary>
         /// <returns></returns>
         public IActionResult OnPostAnotherTurn()
         {
             CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
 
-            if (IsChallengeValidate)
-            {
-                ActualTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
-
-                ActualTeam.Score++;
-                RepoTeam.Update(ActualTeam);
-            }
+            IncreaseScoreIfChallengeValidate(ActualTeam);
 
             return RedirectPreserveMethod($"/Challenge/{CurrentGameId}");
         }
 
         /// <summary>
-        /// Déclenche la fin de partie
+        /// Trigger end game
         /// </summary>
         /// <returns></returns>
         public IActionResult OnPostEndGame()
@@ -109,15 +120,38 @@ namespace BillardHazard.Pages.Challenge
             CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
             TempData.Remove("CurrentGameId");
 
-            if (IsChallengeValidate)
-            {
-                ActualTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
-
-                ActualTeam.Score++;
-                RepoTeam.Update(ActualTeam);
-            }
+            IncreaseScoreIfChallengeValidate(ActualTeam);
 
             return RedirectPreserveMethod($"/EndGame/{CurrentGameId}");
+        }
+
+        /// <summary>
+        /// Increase score team if the challenge is validate
+        /// </summary>
+        /// <param name="team"></param>
+        private void IncreaseScoreIfChallengeValidate(Team team)
+        {
+            if (IsChallengeValidate)
+            {
+                team = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
+
+                team.Score++;
+                RepoTeam.Update(team);
+            }
+        }
+
+        /// <summary>
+        /// Populate the a list of random rules for this turn
+        /// </summary>
+        private void PopulateRulesTurn()
+        {
+            Random rnd = new Random();
+
+            for (int i = 0; i < RULES_TURN_NUMBER; i++)
+            {
+                int randIndex = rnd.Next(Rule.Count);
+                RulesCurrentTurn.Add(Rule[randIndex]);
+            }
         }
     }
 }

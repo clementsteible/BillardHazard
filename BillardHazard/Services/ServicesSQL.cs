@@ -4,53 +4,53 @@ using System.Linq;
 
 namespace BillardHazard.Services
 {
+    /// <summary>
+    /// Services to interact with DB
+    /// </summary>
     public static class ServicesSQL
     {
-        public static void DeleteGamesAndAssociatedTeams(BhContext _context)
+        /// <summary>
+        /// Delete games passed in params and their associated teams
+        /// </summary>
+        /// <param name="dbContext">DbContext</param>
+        /// <param name="games">List of games</param>
+        public static void DeleteGamesAndAssociatedTeams(BhContext dbContext, List<Game> games)
         {
-            IList<Team> teams = _context.Teams.ToList();
-            IList<Game> games = _context.Games.ToList();
-
-            foreach (Team team in teams)
-            {
-                _context.Remove(team);
-            }
-
             foreach (Game game in games)
             {
-                _context.Remove(game);
+                foreach (Team team in game.Teams)
+                {
+                    dbContext.Remove(team);
+                }
+
+                dbContext.Remove(game);
             }
 
-            _context.SaveChanges();
+            dbContext.SaveChanges();
         }
 
         /// <summary>
-        /// Delete all Games old more than 2 days and their associated Teams are deleted
+        /// Delete all Games and their associated Teams
         /// </summary>
-        /// <param name="_context"></param>
-        public static void DeleteOldGames(BhContext _context)
+        /// <param name="_context">DbContext</param>
+        public static void EraseAllGames(BhContext dbContext)
         {
-            DateTime limitDate = DateTime.Now.AddDays(-2);
+            List<Game> oldGames = dbContext.Games.Include(g => g.Teams).ToList();
 
-            IList<Game> oldGames = _context.Games.Where(g => g.Beginning < limitDate).ToList();
-            IList<Team> oldTeams = new List<Team>();
+            DeleteGamesAndAssociatedTeams(dbContext, oldGames);
+        }
 
-            foreach (Game game in oldGames)
-            {
-                //TODO oldTeams
-            }
+        /// <summary>
+        /// Delete all Games old more than 2 days and their associated Teams
+        /// </summary>
+        /// <param name="_context">DbContext</param>
+        public static void DeleteOldGames(BhContext dbContext, int daysInThePast)
+        {
+            DateTime limitDate = DateTime.Now.AddDays(-daysInThePast);
 
-            foreach (Team team in oldTeams)
-            {
-                _context.Remove(team);
-            }
+            List<Game> oldGames = dbContext.Games.Where(g => g.Beginning < limitDate).Include(g => g.Teams).ToList();
 
-            foreach (Game game in oldGames)
-            {
-                _context.Remove(game);
-            }
-
-            _context.SaveChanges();
+            DeleteGamesAndAssociatedTeams(dbContext, oldGames);
         }
     }
 }

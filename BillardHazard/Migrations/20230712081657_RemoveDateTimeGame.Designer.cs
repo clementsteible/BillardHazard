@@ -3,6 +3,7 @@ using System;
 using BillardHazard;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BillardHazard.Migrations
 {
     [DbContext(typeof(BhContext))]
-    partial class BhContextModelSnapshot : ModelSnapshot
+    [Migration("20230712081657_RemoveDateTimeGame")]
+    partial class RemoveDateTimeGame
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +29,9 @@ namespace BillardHazard.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("Beginning")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -59,9 +65,6 @@ namespace BillardHazard.Migrations
 
                     b.Property<string>("Explanation")
                         .HasColumnType("longtext");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

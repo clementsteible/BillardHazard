@@ -19,16 +19,16 @@
 </div>
 
 <form method="post">
-    <div id="challengeState" class="mt-3">
-        <a title="Validé ou invalidé le défi en cours (Entrée)" id="challengeStateDescritption" class="challengeNotValidate">Défi non-validé</a>
-    </div>
-    <input hidden id="isChallengeValidate" type="radio" asp-for="IsChallengeValidate" value="true" />
-    <input hidden id="isChallengeNotValidate" type="radio" asp-for="IsChallengeValidate" value="false" />
 
     <div class="container">
         <div class="row">
             <div id="oneMoreTurn" class="col-sm mt-3">
                 <button id="btnOneMoreTurn" class="pointer btn btn-dark" type="submit" asp-page-handler="AnotherTurn" title="Tour supplémentaire pour l'équipe @Model.ActualTeam.Color (Flèche gauche)"></button>
+            </div>
+            <div id="challengeState" class="col-sm mt-3">
+                <a title="Validé ou invalidé le défi en cours (Entrée)" id="challengeStateDescritption" class="challengeNotValidate">Défi non-validé</a>
+                <input hidden id="isChallengeValidate" type="radio" asp-for="IsChallengeValidate" value="true" />
+                <input hidden id="isChallengeNotValidate" type="radio" asp-for="IsChallengeValidate" value="false" />
             </div>
             <div id="nextTeamTurn" class="col-sm mt-3">
                 <button id="btnNextTeamTurn" class="pointer btn btn-dark" type="submit" asp-page-handler="OpponentTurn" title="Au tour de l'équipe @Model.OpponentTeam.Color (Flèche droite)"></button>
@@ -58,104 +58,13 @@
 </form>
 
 <script>
-    window.addEventListener('load', function () {
+    var decodedJson = decodeHtml('@Model.JsonRules');
 
-        var display = document.getElementById("display");
-        var btnDice = document.getElementById("btnDice");
-
-        var decodedJson = decodeHtml('@Model.JsonRules');
-        var rules = JSON.parse(decodedJson);
-
-        function decodeHtml(html) {
-            var txt = document.createElement("textarea");
-            txt.innerHTML = html;
-            return txt.value;
-        }
-
-        function WriteInDisplay(text) {
-            display.innerHTML = text;
-        }
-
-        //On choisit une règle au hasard dans la liste des règles et on l'affiche
-        function DisplaysRandomRule() {
-            WriteInDisplay(rules[Math.floor(Math.random() * rules.length)].Explanation);
-        }
-
-        btnDice.addEventListener("click", function () { DisplaysRandomRule(); ChallengeDiceDecrease(); });
-        
-        //Afficher la règle du défi
-        DisplaysRandomRule();
-
-        var challengeState = document.getElementById('challengeState');
-        var challengeStateDescritption = document.getElementById('challengeStateDescritption');
-
-        var isChallengeValidate = document.getElementById('isChallengeValidate');
-        var isChallengeNotValidate = document.getElementById('isChallengeNotValidate');
-        //Initialisation de l'état au chargement de l'écran
-        isChallengeNotValidate.click();
-
-        var root = document.querySelector(':root');
-        var challengeDiceCounter = 2;
-
-        var btnOneMoreTurn = document.getElementById('btnOneMoreTurn');
-        var btnNextTeamTurn = document.getElementById('btnNextTeamTurn');
-
-        var btnEndGame = document.getElementById('btnEndGame');
-
-        function ChangeChallengeValidationState() {
-            if (challengeStateDescritption.classList == 'challengeNotValidate') {
-                challengeStateDescritption.classList = 'challengeValidate';
-                challengeStateDescritption.innerHTML = "Défi validé";
-                isChallengeValidate.click();
-            }
-            else {
-                challengeStateDescritption.classList = 'challengeNotValidate';
-                challengeStateDescritption.innerHTML = "Défi non-validé";
-                isChallengeNotValidate.click();
-            }
-        }
-
-        challengeState.addEventListener("click", function () { ChangeChallengeValidationState(); });
-
-        function ChallengeDiceDecrease() {
-            challengeDiceCounter--;
-
-            let diceCode = "\"\\268" + challengeDiceCounter + "\"";
-
-            root.style.setProperty("--dice", diceCode);
-
-            if (challengeDiceCounter < 0) {
-                btnDice.style.display = 'none';
-            }
-        }
-
-        //Commandes clavier
-        window.addEventListener("keydown", function (event) {
-
-            switch (event.which) {
-                //Enter
-                case 13:
-                    challengeState.click();
-                    break;
-                //Espace
-                case 32:
-                    if (challengeDiceCounter > -1) {
-                        btnDice.click();
-                    }
-                    break;
-                //Flèche gauche
-                case 37:
-                    btnOneMoreTurn.click();
-                    break;
-                //Flèche droite
-                case 39:
-                    btnNextTeamTurn.click();
-                    break;
-                //Échape
-                case 27:
-                    btnEndGame.click();
-                    break;
-            }
-        });
-    });
+    function decodeHtml(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
 </script>
+
+<script src="~/js/challenge.js" asp-append-version="true"></script>

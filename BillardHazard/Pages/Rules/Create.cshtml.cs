@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BillardHazard.Models;
 
 namespace BillardHazard.Pages.Rules
 {
@@ -18,7 +19,7 @@ namespace BillardHazard.Pages.Rules
         }
 
         [BindProperty]
-        public Models.Rule Rule { get; set; } = default!;
+        public Rule Rule { get; set; } = default!;
         
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

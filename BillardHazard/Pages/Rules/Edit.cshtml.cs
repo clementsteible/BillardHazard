@@ -15,7 +15,7 @@ namespace BillardHazard.Pages.Rules
         }
 
         [BindProperty]
-        public Models.Rule Rule { get; set; } = default!;
+        public Rule Rule { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {

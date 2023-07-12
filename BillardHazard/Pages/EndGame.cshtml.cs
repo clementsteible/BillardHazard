@@ -8,11 +8,15 @@ namespace BillardHazard.Pages
     public class EndGameModel : PageModel
     {
         private readonly BhContext _context;
+        private readonly int MAXIMUM_NUMBER_OF_HIGHSCORES = 25;
+        /// <summary>
+        /// Message display on page
+        /// </summary>
         public string Message { get; set; }
         public Team RedTeam { get; set; }
         public Team YellowTeam { get; set; }
 
-        public IList<HighScore> HighScores { get; set; } = default!;
+        public List<HighScore> HighScores { get; set; }
         public Repository<Team> RepoTeam { get; set; }
         public Repository<Game> RepoGame { get; set; }
 
@@ -36,6 +40,7 @@ namespace BillardHazard.Pages
             RedTeam = teams.First(t => t.Number == (int)ColorTeamEnum.Rouge);
             YellowTeam = teams.First(t => t.Number == (int)ColorTeamEnum.Jaune);
 
+            // Set highscores and clean the DB
             foreach (Team team in teams)
             {
                 SetHighScore(team);
@@ -44,36 +49,49 @@ namespace BillardHazard.Pages
             
             Game game = RepoGame.FindById(gameId);
 
+            // Set highscores and clean the DB
             RepoGame.Delete(game);
 
+            // Update Highscores
             SetHighScoresTable();
 
             return Page();
         }
 
+        /// <summary>
+        /// Set team score in the Highscores table if team is in the top teams
+        /// </summary>
+        /// <param name="team"></param>
         private void SetHighScore(Team team)
         {
             Repository<HighScore> repoHighScore = new Repository<HighScore>(_context);
+            // Retrieve the worst highscore among all highscores
             HighScore? worstHighScore = repoHighScore.GetAll().OrderBy(hs => hs.Score).FirstOrDefault();
 
+            // If the actual team score is better than the worst score or if there is less than the maximum number of highscores in total...
             if (worstHighScore == null 
-                || repoHighScore.GetAll().Count < 25
+                || repoHighScore.GetAll().Count < MAXIMUM_NUMBER_OF_HIGHSCORES
                 || team.Score > worstHighScore.Score)
             {
                 HighScore newHighScore = new HighScore();
                 newHighScore.Score = team.Score;
                 newHighScore.TeamName = team.Name;
 
+                // ... create new entry in the Hisghscore's table
                 repoHighScore.Create(newHighScore);
 
+                // If there is more than maximum number of highscores, delete the worse
                 if (worstHighScore != null
-                    && repoHighScore.GetAll().Count > 25)
+                    && repoHighScore.GetAll().Count > MAXIMUM_NUMBER_OF_HIGHSCORES)
                 {
                     repoHighScore.Delete(worstHighScore);
                 }
             }
         }
 
+        /// <summary>
+        /// Retrieve and class highscores for table display
+        /// </summary>
         private void SetHighScoresTable()
         {
             HighScores = _context.HighScores.ToList();

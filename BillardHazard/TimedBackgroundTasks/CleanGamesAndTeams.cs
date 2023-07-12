@@ -3,12 +3,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BillardHazard.TimedBackgroundTasks
 {
-    public class TimedHostedService : BackgroundService
+    /// <summary>
+    /// Erase periodically and automatically the games older than a variable date and their Teams associated
+    /// </summary>
+    public class CleanGamesAndTeams : BackgroundService
     {
-        private readonly ILogger<TimedHostedService> _logger;
+        private readonly ILogger<CleanGamesAndTeams> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        /// <summary>
+        // All the games older than this variable, and their Teams associated, will be erase 
+        /// </summary>
+        private readonly int DAYS_IN_THE_PAST = 2;
+        /// <summary>
+        // Cleaning frequency 
+        /// </summary>
+        private readonly PeriodicTimer CLEANING_PERIODICITY = new(TimeSpan.FromDays(1));
 
-        public TimedHostedService(ILogger<TimedHostedService> logger, IServiceScopeFactory serviceScopeFactory)
+        public CleanGamesAndTeams(ILogger<CleanGamesAndTeams> logger, IServiceScopeFactory serviceScopeFactory)
         {
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
@@ -18,7 +29,7 @@ namespace BillardHazard.TimedBackgroundTasks
         {
             _logger.LogInformation("Timed Hosted Service running.");
 
-            using PeriodicTimer timer = new(TimeSpan.FromDays(1));
+            using PeriodicTimer timer = CLEANING_PERIODICITY;
 
             try
             {
@@ -41,9 +52,9 @@ namespace BillardHazard.TimedBackgroundTasks
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<BhContext>();
-
-                ServicesSQL.DeleteGamesAndAssociatedTeams(dbContext);
-                _logger.LogInformation("All Games old more than 2 days and their associated Teams are deleted !");
+                
+                ServicesSQL.DeleteOldGames(dbContext, DAYS_IN_THE_PAST);
+                _logger.LogInformation($"All Games old more than {DAYS_IN_THE_PAST} days and their associated Teams are deleted !");
             }
         }
     }

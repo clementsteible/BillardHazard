@@ -8,4 +8,5 @@ public partial class Rule
     public Guid Id { get; set; }
 
     public string? Explanation { get; set; }
+    public int Points { get; set; }
 }

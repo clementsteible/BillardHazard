@@ -8,27 +8,27 @@ using BillardHazard.TimedBackgroundTasks;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-//Set root page
+// Set default root page path
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.RootDirectory = "/Pages";
 });
 
-//Add EF Core classes to link the BDD
+// Add EF Core classes to link the BDD
 builder.Services
     .AddDbContext<BhContext>(options => options.UseMySQL(connectionString));
 
 builder.Services
     .AddDbContext<IdentityDbContext>(options => options.UseMySQL(connectionString));
 
-//Define required role for limited access pages
+// Define required role for limited access pages
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdministratorRole",
          policy => policy.RequireRole(Constants.ADMIN));
 });
 
-//Set authorizations
+// Set authorizations
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizePage("/HighScores/Create");
@@ -50,7 +50,7 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityDbContext>();
 
-builder.Services.AddHostedService<TimedHostedService>();
+builder.Services.AddHostedService<CleanGamesAndTeams>();
 
 var app = builder.Build();
 
@@ -69,7 +69,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Create BDD if not exists
+// Create DB if not exists
 using (var scope = app.Services.CreateScope())
 {
     var scopedServices = scope.ServiceProvider;

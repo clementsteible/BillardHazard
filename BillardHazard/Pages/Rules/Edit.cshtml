@@ -19,6 +19,11 @@
                 <input asp-for="Rule.Explanation" class="form-control" />
                 <span asp-validation-for="Rule.Explanation" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Rule.Points" class="control-label"></label>
+                <input asp-for="Rule.Points" class="form-control" />
+                <span asp-validation-for="Rule.Points" class="text-danger"></span>
+            </div>
             <input type="submit" value="Save" class="btn btn-success" />
         </form>
         <a asp-page="./Index">

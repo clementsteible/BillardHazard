@@ -10,7 +10,7 @@ var yellowRadioBtn = document.getElementById('yellowTeamFirst');
 
 var btnSubmit = document.getElementById('btnSubmit');
 
-//Visual choose color team
+// Visual choose color team
 function ClickOnYellowBall() {
     redShadow.classList.add('unselectedBall');
     yellowShadow.classList.remove('unselectedBall');
@@ -18,7 +18,7 @@ function ClickOnYellowBall() {
     yellowRadioBtn.click();
 }
 
-//Visual choose color team
+// Visual choose color team
 function ClickOnRedBall() {
     yellowShadow.classList.add('unselectedBall');
     redShadow.classList.remove('unselectedBall');
@@ -33,15 +33,15 @@ yellowBallSection.addEventListener("click", function () { ClickOnYellowBall(); }
 window.addEventListener("keydown", function (event) {
 
     switch (event.which) {
-        //Enter
+        // Enter
         case 13:
             btnSubmit.click();
             break;
-        //Flèche gauche
+        // Left arrow
         case 37:
             yellowBallSection.click();
             break;
-        //Flèche droite
+        // Right arrow
         case 39:
             redBallSection.click();
             break;

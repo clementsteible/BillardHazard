@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using BillardHazard.Models;
 
 namespace BillardHazard.Pages.Rules
 {
@@ -14,7 +15,7 @@ namespace BillardHazard.Pages.Rules
         }
 
         [BindProperty]
-      public Models.Rule Rule { get; set; } = default!;
+      public Rule Rule { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {

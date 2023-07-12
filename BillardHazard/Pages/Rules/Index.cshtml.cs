@@ -8,6 +8,7 @@ namespace BillardHazard.Pages.Rules
     public class IndexModel : PageModel
     {
         private readonly BhContext _context;
+        public string NumberOfTotalRulesMessage { get; set; }
 
         public IndexModel(BhContext context)
         {
@@ -21,6 +22,7 @@ namespace BillardHazard.Pages.Rules
             if (_context.Rules != null)
             {
                 Rules = await _context.Rules.ToListAsync();
+                NumberOfTotalRulesMessage = $"Il y a {Rules.Count} rules au total en BDD.";
             }
         }
 
