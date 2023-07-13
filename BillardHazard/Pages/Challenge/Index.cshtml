@@ -13,12 +13,20 @@
     </figure>
 </section>
 
-<div id="display"></div>
 <div>
-    <button id="btnDice" class="btn btn-dark mt-3" title="Changer le défi en cours (Espace)"></button>
+    <div id="display" class="p-5"></div>
+    <span class="counterCircle">+<span id="counterCircleScore"></span></span>
+</div>
+
+<div>
+    <button id="btnDice" class="btn btn-dark mt-3" title='Changer le défi en cours (touche "r")'></button>
 </div>
 
 <form method="post">
+
+    <input hidden id="isChallengeValidate" type="radio" asp-for="IsChallengeValidate" value="true" title="validate" />
+    <input hidden id="isChallengeNotValidate" type="radio" asp-for="IsChallengeValidate" value="false" title="nope" />
+    <input hidden id="challengePointsInput" type="number" asp-for="ChallengePoints" />
 
     <div class="container">
         <div class="row">
@@ -26,16 +34,14 @@
                 <button id="btnOneMoreTurn" class="pointer btn btn-dark" type="submit" asp-page-handler="AnotherTurn" title="Tour supplémentaire pour l'équipe @Model.ActualTeam.Color (Flèche gauche)"></button>
             </div>
             <div id="challengeState" class="col-sm mt-3">
-                <a title="Validé ou invalidé le défi en cours (Entrée)" id="challengeStateDescritption" class="challengeNotValidate">Défi non-validé</a>
-                <input hidden id="isChallengeValidate" type="radio" asp-for="IsChallengeValidate" value="true" />
-                <input hidden id="isChallengeNotValidate" type="radio" asp-for="IsChallengeValidate" value="false" />
+                <a title="Validé ou invalidé le défi en cours (Espace)" id="challengeStateDescritption" class="challengeNotValidate">Défi non-validé</a>
             </div>
             <div id="nextTeamTurn" class="col-sm mt-3">
                 <button id="btnNextTeamTurn" class="pointer btn btn-dark" type="submit" asp-page-handler="OpponentTurn" title="Au tour de l'équipe @Model.OpponentTeam.Color (Flèche droite)"></button>
             </div>
         </div>
         <div class="row justify-content-center align-content-center">
-            <table id="tableScore" class="w-25 mt-5">
+            <table id="tableScore" class="w-25 mt-5 bg-black">
                 <tr>
                     <th colspan="2">SCORES</th>
                 </tr>

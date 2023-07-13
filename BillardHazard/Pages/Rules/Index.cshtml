@@ -13,6 +13,9 @@
             Créer un nouveau défi
         </button>
     </a>
+    <form method="post">
+        <button asp-page-handler="ResetDefaultRules" type="submit" class="btn btn-danger">Remettre les défis par défaut</button>
+    </form>
 </p>
 
 @if (Model.Rules != null && Model.Rules.Count > 0)
@@ -23,9 +26,9 @@
             Erase all Rules
         </button>
     </p>
-    <p>
-        @Model.NumberOfTotalRulesMessage;
-    </p>
+    <h2>
+        @Model.NumberOfTotalRulesMessage
+    </h2>
     <table class="table bg-white">
         <thead>
             <tr>

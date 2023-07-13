@@ -7,14 +7,24 @@ window.addEventListener('load', function () {
 
     var display = document.getElementById("display");
     var btnDice = document.getElementById("btnDice");
+    var counterCircleScoreDisplay = document.getElementById("counterCircleScore");
+    var challengePointsInput = document.getElementById("challengePointsInput");
 
-    function WriteInDisplay(text) {
+    function WriteInDisplays(text, points) {
         display.innerHTML = text;
+        counterCircleScoreDisplay.innerHTML = points;
+        SetScorePoints(points);
+    }
+
+    // Set score in hidden input
+    function SetScorePoints(points) {
+        challengePointsInput.value = points;
     }
 
     // Retrieve a random rule in rules list and display it
     function DisplaysRandomRule() {
-        WriteInDisplay(rules[Math.floor(Math.random() * rules.length)].Explanation);
+        let randomRule = rules[Math.floor(Math.random() * rules.length)];
+        WriteInDisplays(randomRule.Explanation, randomRule.Points);
     }
 
     btnDice.addEventListener("click", function () { DisplaysRandomRule(); ChallengeDiceDecrease(); });
@@ -70,11 +80,11 @@ window.addEventListener('load', function () {
     window.addEventListener("keydown", function (event) {
 
         switch (event.which) {
-            // Down arrow
-            case 40:
+            // Space
+            case 32:
                 challengeState.click();
                 break;
-            // R (like Reroll)
+            // Key 'r' (like reroll)
             case 82:
                 if (challengeDiceCounter > -1) {
                     btnDice.click();

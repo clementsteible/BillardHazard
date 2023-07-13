@@ -3,6 +3,7 @@ using System;
 using BillardHazard;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -11,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BillardHazard.Migrations
 {
     [DbContext(typeof(BhContext))]
-    [Migration("20230703123626_TeamGameForeignKey")]
-    partial class TeamGameForeignKey
+    [Migration("20230712154929_InitSqlServer")]
+    partial class InitSqlServer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,13 +21,18 @@ namespace BillardHazard.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("BillardHazard.Models.Game", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Beginning")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -37,14 +43,16 @@ namespace BillardHazard.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("TeamId")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("HighScore", (string)null);
                 });
@@ -53,10 +61,13 @@ namespace BillardHazard.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Explanation")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -67,19 +78,19 @@ namespace BillardHazard.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Color")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("GameId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsItsTurn")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -92,15 +103,6 @@ namespace BillardHazard.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Team", (string)null);
-                });
-
-            modelBuilder.Entity("BillardHazard.Models.HighScore", b =>
-                {
-                    b.HasOne("BillardHazard.Models.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("BillardHazard.Models.Team", b =>

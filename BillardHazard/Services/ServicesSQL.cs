@@ -10,6 +10,21 @@ namespace BillardHazard.Services
     public static class ServicesSQL
     {
         /// <summary>
+        /// Create rules in entries in DB
+        /// </summary>
+        /// <param name="dbContext">DbContext</param>
+        /// <param name="defaultRules">List of default rules</param>
+        public static void PopulateRuleTableWithDefaultRules(BhContext dbContext, List<Rule> defaultRules)
+        {
+            foreach (Rule rule in defaultRules)
+            {
+                dbContext.Rules.Add(rule);
+            }
+
+            dbContext.SaveChanges();
+        }
+
+        /// <summary>
         /// Delete games passed in params and their associated teams
         /// </summary>
         /// <param name="dbContext">DbContext</param>

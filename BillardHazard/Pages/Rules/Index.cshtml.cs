@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillardHazard.Models;
+using BillardHazard.Tools;
 
 namespace BillardHazard.Pages.Rules
 {
@@ -24,6 +25,25 @@ namespace BillardHazard.Pages.Rules
                 Rules = await _context.Rules.ToListAsync();
                 NumberOfTotalRulesMessage = $"Il y a {Rules.Count} rules au total en BDD.";
             }
+        }
+
+        public IActionResult OnPostResetDefaultRules()
+        {
+            List<Rule> rules = _context.Rules.ToList();
+
+            foreach (Rule rule in rules)
+            {
+                _context.Rules.Remove(rule);
+            }
+
+            foreach (Rule rule in DefaultRules.DefaultRulesList)
+            {
+                _context.Rules.Add(rule);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToPage("./Index");
         }
 
         public IActionResult OnPostEraseAllRules()

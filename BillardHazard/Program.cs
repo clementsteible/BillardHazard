@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BillardHazard.Areas.Identity.Data;
 using BillardHazard.TimedBackgroundTasks;
+using BillardHazard.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("ProdConnection") ?? throw new InvalidOperationException("Connection string 'ProdConnection' not found.");
+//var connectionString = builder.Configuration.GetConnectionString("DevConnection") ?? throw new InvalidOperationException("Connection string 'DevConnection' not found.");
 
 // Set default root page path
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
@@ -15,11 +17,8 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 });
 
 // Add EF Core classes to link the BDD
-builder.Services
-    .AddDbContext<BhContext>(options => options.UseMySQL(connectionString));
-
-builder.Services
-    .AddDbContext<IdentityDbContext>(options => options.UseMySQL(connectionString));
+builder.Services.AddDbContext<BhContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
 
 // Define required role for limited access pages
 builder.Services.AddAuthorization(options =>
@@ -74,8 +73,19 @@ using (var scope = app.Services.CreateScope())
 {
     var scopedServices = scope.ServiceProvider;
     var db = scopedServices.GetRequiredService<BhContext>();
+    var dbIdentity = scopedServices.GetRequiredService<IdentityDbContext>();
 
     db.Database.EnsureCreated();
+
+    if (db.Rules.Count() < 1)
+    {
+        foreach (Rule rule in DefaultRules.DefaultRulesList)
+        {
+            db.Rules.Add(rule);
+        }
+
+        db.SaveChanges();
+    }
 }
 
 // Create Admin role in BDD if not exists

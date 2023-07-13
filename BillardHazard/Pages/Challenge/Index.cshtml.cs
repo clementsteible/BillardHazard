@@ -34,17 +34,14 @@ namespace BillardHazard.Pages.Challenge
         public string CssBallOpponentColorClass { get; set; }
         [BindProperty]
         public bool IsChallengeValidate { get; set; }
+        [BindProperty]
+        public int ChallengePoints { get; set; }
 
         public IActionResult OnPost(Guid gameId)
         {
             if (_context.Rules != null)
             {
                 Rule = _context.Rules.ToList();
-
-                /*
-                RulesCurrentTurn = new List<Rule>();
-                PopulateRulesTurn();
-                */
 
                 #region Save for later on page refresh
                 
@@ -76,8 +73,6 @@ namespace BillardHazard.Pages.Challenge
         /// <returns></returns>
         public IActionResult OnPostOpponentTurn()
         {
-            //PopulateRulesTurn();
-
             CurrentGameId = (Guid)TempData.Peek("CurrentGameId");
 
             ActualTeam = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
@@ -85,7 +80,7 @@ namespace BillardHazard.Pages.Challenge
 
             if (IsChallengeValidate)
             {
-                ActualTeam.Score++;
+                ActualTeam.Score += ChallengePoints;
             }
 
             // Change turns states
@@ -135,22 +130,8 @@ namespace BillardHazard.Pages.Challenge
             {
                 team = RepoTeam.GetAll().First(t => t.GameId.Equals(CurrentGameId) && t.IsItsTurn);
 
-                team.Score++;
+                team.Score += ChallengePoints;
                 RepoTeam.Update(team);
-            }
-        }
-
-        /// <summary>
-        /// Populate the a list of random rules for this turn
-        /// </summary>
-        private void PopulateRulesTurn()
-        {
-            Random rnd = new Random();
-
-            for (int i = 0; i < RULES_TURN_NUMBER; i++)
-            {
-                int randIndex = rnd.Next(Rule.Count);
-                RulesCurrentTurn.Add(Rule[randIndex]);
             }
         }
     }

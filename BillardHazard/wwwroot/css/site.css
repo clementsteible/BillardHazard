@@ -1,3 +1,8 @@
+   /************/
+  /* Main CSS */
+ /*   file   */
+/************/
+
 html {
   font-size: 14px;
 }
@@ -38,18 +43,6 @@ footer {
     background-image: url(../img/bg.jpg);
 }
 
-a {
-    /*
-    color: black;
-    */
-}
-
-    a:hover {
-        /*
-    color: #2d3e57; 
-            */
-}
-
 /******************/
 /* Footer Header */
 /****************/
@@ -78,9 +71,9 @@ a {
     color: #bebebf !important;
 }
 
+  /*************/
+ /* Challenge */
 /*************/
-/* Page Défi*/
-/***********/
 #challengeStateDescritption {
     text-decoration: none;
     padding: 0.5rem;
@@ -142,8 +135,10 @@ a {
 }
 
 #display {
-    border: 2px solid;
+    border: 2px solid black;
     border-radius: 16px;
+    background-color: black;
+    padding : 5px;
 }
 
 .pointer {
@@ -156,4 +151,17 @@ a {
 
 #tableScore {
     min-width: 300px;
+}
+
+.counterCircle {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    padding: 8px;
+
+    background: white;
+    border: 4px solid black;
+    color: black;
+    text-align: center;
+    font-size: 2rem;
 }
