@@ -7,8 +7,7 @@ using BillardHazard.TimedBackgroundTasks;
 using BillardHazard.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("ProdConnection") ?? throw new InvalidOperationException("Connection string 'ProdConnection' not found.");
-//var connectionString = builder.Configuration.GetConnectionString("DevConnection") ?? throw new InvalidOperationException("Connection string 'DevConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 // Set default root page path
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
@@ -109,8 +108,8 @@ using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Administrator>>();
 
-    string username = Constants.ADMIN;
-    string password = "Root123!";
+    string username = builder.Configuration.GetSection("OriginalAdmin")["Login"];
+    string password = builder.Configuration.GetSection("OriginalAdmin")["Pwd"];
 
     if (await userManager.FindByNameAsync(username) == null)
     {

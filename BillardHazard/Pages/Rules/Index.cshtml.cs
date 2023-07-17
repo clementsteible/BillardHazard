@@ -17,6 +17,7 @@ namespace BillardHazard.Pages.Rules
         }
 
         public IList<Rule> Rules { get;set; } = default!;
+        public List<Rule> DefaultRulesList { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -24,7 +25,10 @@ namespace BillardHazard.Pages.Rules
             {
                 Rules = await _context.Rules.ToListAsync();
                 NumberOfTotalRulesMessage = $"Il y a {Rules.Count} rules au total en BDD.";
+
             }
+
+            DefaultRulesList = DefaultRules.DefaultRulesList;
         }
 
         public IActionResult OnPostResetDefaultRules()
@@ -57,7 +61,7 @@ namespace BillardHazard.Pages.Rules
 
             _context.SaveChanges();
 
-            return Page();
+            return RedirectToPage("./Index");
         }
     }
 }

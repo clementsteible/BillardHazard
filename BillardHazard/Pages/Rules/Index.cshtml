@@ -13,9 +13,11 @@
             Créer un nouveau défi
         </button>
     </a>
-    <form method="post">
-        <button asp-page-handler="ResetDefaultRules" type="submit" class="btn btn-danger">Remettre les défis par défaut</button>
-    </form>
+</p>
+<p>
+    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#resetModal">
+        Reset default rules
+    </button>
 </p>
 
 @if (Model.Rules != null && Model.Rules.Count > 0)
@@ -65,7 +67,8 @@
         </tbody>
     </table>
 
-    <!-- Modal -->
+
+    <!-- Modal delete -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -91,3 +94,51 @@
 else{
     <h2>Il n'y a pas de Rules !</h2>
 }
+
+<!-- Modal reset rules -->
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-black" id="exampleModalLabel">Are you sure ?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-black">
+                Do you really want to erase all the Rules and replace them by those default Rules ?
+                <table class="table bg-white">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Rules[0].Explanation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Rules[0].Points)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DefaultRulesList)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Explanation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Points)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form method="post">
+                    <button asp-page-handler="ResetDefaultRules" type="submit" class="btn btn-danger">Reset default rules</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

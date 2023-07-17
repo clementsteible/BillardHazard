@@ -52,7 +52,10 @@ namespace BillardHazard.TimedBackgroundTasks
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<BhContext>();
-                
+                /*
+                ServicesSQL.DeleteOldGames(dbContext, DAYS_IN_THE_PAST);
+                _logger.LogInformation($"All Games old more than {DAYS_IN_THE_PAST} days and their associated Teams are deleted !");
+                */
                 ServicesSQL.DeleteOldGames(dbContext, DAYS_IN_THE_PAST);
                 _logger.LogInformation($"All Games old more than {DAYS_IN_THE_PAST} days and their associated Teams are deleted !");
             }
